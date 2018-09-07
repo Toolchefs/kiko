@@ -31,6 +31,9 @@ Your MAYA_PLUG_IN_PATH and proper python paths must be set for the unit tests to
 
 Once you environment is set up, you can run the run_win.py or run_osx.py files inside the kiko/unittests folder. Please note, you might have to edit these files to point to your maya and nuke executables.
 
+## Wiki
+If you are a developer and would like to know more, please have a read to the [wiki](https://github.com/danielefederico/kiko/wiki) and write to us at support@toolchefs.com in case you have any question.
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
