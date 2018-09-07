@@ -1,7 +1,7 @@
 # Kiko
 
 Kiko stands for Keys-In-Keys-Out. It was designed specifically to handle animation curves data in a pipeline-friendly way, but it can do much more.
-With Kiko you can define operators that can handle different kind of data per channel and can work automatically across different DCCs.
+With Kiko you can define operators that can handle different kind of data per item or channel and can work automatically across different DCCs.
 
 Currently Autodesk Maya and The Foundry Nuke are supported. 
 
