@@ -1,0 +1,79 @@
+#! /usr/local/Nuke9.0v8/libnuke-9.0.8.so -nx
+version 9.0 v8
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="105" y="155" w="1280" h="776" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="609" stretch="1"/>
+            <splitter orientation="2">
+                <split size="420"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="296"/>
+                <dock id="" activePageId="Curve Editor.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /home/daniele.federico/Documents/git/kiko/kiko/unittests/fixtures/files/nuke/simple_axis.nk
+ frame 27
+ format "1920 1080 0 0 1920 1080 1 HD"
+ proxy_type scale
+ proxy_format "960 540 0 0 960 540 1 HD Half"
+ defaultViewerLUT "OCIO LUTs"
+ addUserKnob {20 mariTab l Mari}
+ addUserKnob {26 cmdStatus l "listen status" t "The status of Nuke's command port" T <b>Disabled</b>}
+ addUserKnob {26 sendStatus l "send status" t "The status of Nuke's connection to Mari" T <b>Inactive</b>}
+ addUserKnob {3 socketPort l "nuke command port" t "Port to listen on. Make sure this matches the command port set in Mari's \"Nuke\" Palette."}
+ socketPort 50107
+ addUserKnob {6 enableSocket l enabled -STARTLINE}
+ addUserKnob {26 divider l "" +STARTLINE}
+ addUserKnob {20 advanced n 1}
+ advanced 0
+ addUserKnob {3 portRange l "port range" t "If the main specified command port is unavailable, Nuke will try using the next port number, and continue until successful or the indicated number of ports have been tried."}
+ portRange 200
+ addUserKnob {4 enablePortRange l "" t "Indicates whether to use a range of ports up to the given number, or to use only the single one specified." -STARTLINE M {"use range" "single port only"}}
+ addUserKnob {6 localhostOnly l "local host only" t "This determines whether the Mari bridge server will listen for connections from any machine, or from \"localhost\" (the local machine) only.<p>Only allowing connections from localhost is more secure, but will prevent you from using the Nuke&lt;&gt;Mari workflow across the network." +STARTLINE}
+ addUserKnob {1 hostName l "mari host" t "The machine name or IP address that Mari is running on.\nLeave empty if both Mari and Nuke are running on the same machine."}
+ hostName localhost
+ addUserKnob {3 socketPortSend l port t "Port that Mari is listening to. Make sure this matches the command port set in Mari's preferences." -STARTLINE}
+ socketPortSend 6100
+ addUserKnob {2 mariDataDir l "mari data dir" t "Path to directory that will hold transient data to be sent to Mari (exrs, objs and fbx files). If this is left empty, a \"mari\" directory will be created in the nk file's location"}
+ mariDataDir "\[getenv NUKE_TEMP_DIR]/mariData"
+ addUserKnob {2 mariLocation l "mari launch path" t "The path to launch Mari from.<br>This can also be set using the <b>MARI_INSTALL_PATH</b> environment variable."}
+ mariLocation /usr/local/Mari2.6v1/mari
+ addUserKnob {20 endGroup n -1}
+}
+Viewer {
+ inputs 0
+ frame 27
+ frame_range 1-100
+ name Viewer1
+ xpos -40
+ ypos -10
+}
+Axis2 {
+ inputs 0
+ translate {{curve i x1 0 L x7 5 S x15 1 s0 x27 30} {curve i x1 0 K x7 10 x15 4 S x27 -10} {curve l x4 0 k x7 6 s4 t-3 x15 4 s-3.799999952 t-0.75 l x27 -30}}
+ rotate {{curve i x1 0 x7 3 x15 3 s-3.200000048 x27 -50} {curve i x1 0 x7 10 s-2 x15 20 s8 x27 -20} {curve i x1 0 R x7 20 L x15 15 s-0.9375 t-5 S x27 -10}}
+ name Axis1
+ selected true
+ xpos -403
+ ypos -192
+}
