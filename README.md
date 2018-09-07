@@ -31,7 +31,7 @@ Once you environment is set up, you can run the run_win.py or run_osx.py files i
 
 ## Contributing
 
-Please read [CONTRIBUTING.md]() for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
 
@@ -41,7 +41,7 @@ This project is licensed under [the LPGP license](http://www.gnu.org/licenses/).
 
 Please feel free to contact us at support@toolchefs.com in case you would like contribute or simply have questions.
 
-#ENJOY!
+### ENJOY!
 
 
 
