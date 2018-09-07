@@ -14,6 +14,8 @@ Kiko is written completely in python.
 Kiko has already been used on Maya 2016 onwards and on Nuke 11. 
 We are looking for contributors who could help us making it work on others DCCs (i.e. Modo, Houdini) and writing new operators.
 
+Few things are missing, like UIs for Nuke, cross app tests, etc.
+
 ## Getting started
 
 ### Installing
@@ -40,6 +42,8 @@ This project is licensed under [the LPGP license](http://www.gnu.org/licenses/).
 ## Contact us
 
 Please feel free to contact us at support@toolchefs.com in case you would like contribute or simply have questions.
+
+The rig used in the unit tests is courtesy of Alex Puente.
 
 ### ENJOY!
 
