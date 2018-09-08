@@ -12,6 +12,9 @@
 #
 # ==============================================================================
 
+"""
+This plug-in is used in maya for handling the undo
+"""
 
 import sys
 
@@ -83,7 +86,7 @@ def initializePlugin(m_obj):
 def uninitializePlugin(m_obj):
     mplugin = OpenMayaMPx.MFnPlugin(m_obj)
     try:
-        mplugin.deregisterCommand(PLUGIN_COMMAND_NAME)
+        mplugin.deregisterCommand(COMMAND_NAME)
     except:
         sys.stderr.write('Failed to unregister command: %s.\n' % COMMAND_NAME)
         raise
