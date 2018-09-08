@@ -19,7 +19,7 @@ Few things are missing, like UIs for Nuke, cross app tests, etc.
 ## Getting started
 
 ### Installing
-Installing in Maya it is quite easy.
+Installing in Maya is quite easy.
 ```
 - copy the entire folder in your maya scripts folder.
 - you can launch the maya importer and exporter UIs by running the code under kiko/extras/maya.
