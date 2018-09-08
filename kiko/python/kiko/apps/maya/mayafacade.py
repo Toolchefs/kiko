@@ -775,18 +775,18 @@ class MayaFacade(BaseFacade):
         return val
 
     @staticmethod
-    def has_world_space_matrix(node):
+    def has_world_space_matrix(node_obj):
         try:
-            OpenMaya.MFnTransform(node)
+            OpenMaya.MFnTransform(node_obj)
             return True
         except RuntimeError:
             return False
 
     @staticmethod
-    def get_world_space_rotation_and_translation(node):
+    def get_world_space_rotation_and_translation(node_obj):
         # maya requires a MDagPath in order to build successfully a MFnTransform
         dp = OpenMaya.MDagPath()
-        OpenMaya.MDagPath.getAPathTo(node, dp)
+        OpenMaya.MDagPath.getAPathTo(node_obj, dp)
 
         m_trans = OpenMaya.MFnTransform(dp)
 
@@ -799,10 +799,10 @@ class MayaFacade(BaseFacade):
         return (r.x, r.y, r.z, r.w), (t.x, t.y, t.z)
 
     @staticmethod
-    def set_world_space_rotation_and_translation_at_time(node, time, rotation,
-                                                         translation):
+    def set_world_space_rotation_and_translation_at_time(node_obj, time,
+                                                         rotation, translation):
         # get parent matrix at the given time
-        mfn = OpenMaya.MFnDependencyNode(node)
+        mfn = OpenMaya.MFnDependencyNode(node_obj)
         plug = mfn.findPlug("parentMatrix").elementByLogicalIndex(0)
         o = plug.asMObject(OpenMaya.MDGContext(OpenMaya.MTime(time)))
         m = MayaFacadeHelper.sanitize_matrix(OpenMaya.MFnMatrixData(o).matrix())
@@ -830,14 +830,14 @@ class MayaFacade(BaseFacade):
 
         for name, value in d.iteritems():
             plug = mfn.findPlug(name)
-            kco = MayaFacade.get_keyframable_channel_object(node, plug)
+            kco = MayaFacade.get_keyframable_channel_object(node_obj, plug)
             # this might happen when having incoming connectiosn to this plug
             if kco is None:
                 continue
             MayaFacade.set_channel_key_frame(kco, time, value)
 
     @staticmethod
-    def remove_animation_from_channel(node, channel_obj):
+    def remove_animation_from_channel(node_obj, channel_obj):
         if MayaPreferences.break_all_connections_in_apply_mode:
             plugs = OpenMaya.MPlugArray()
             channel_obj.connectedTo(plugs, True, False)
@@ -853,7 +853,7 @@ class MayaFacade(BaseFacade):
             # it might be that the parent compound attribute is connected
             if channel_obj.isChild():
                 p_plug = channel_obj.parent()
-                MayaFacade.remove_animation_from_channel(node, p_plug)
+                MayaFacade.remove_animation_from_channel(node_obj, p_plug)
 
             MayaUndoHelper.dg_modifier.doIt()
         else:
@@ -863,7 +863,7 @@ class MayaFacade(BaseFacade):
                 MayaUndoHelper.dg_modifier.doIt()
 
     @staticmethod
-    def shift_animation_in_frame_range(node, channel_obj, start, end):
+    def shift_animation_in_frame_range(node_obj, channel_obj, start, end):
         node = MayaFacadeHelper.get_connected_animation_curve(channel_obj)
         if node is None:
             return
@@ -880,7 +880,7 @@ class MayaFacade(BaseFacade):
             c_key -= 1
 
     @staticmethod
-    def remove_animation_from_frame_range(node, channel_obj, start, end):
+    def remove_animation_from_frame_range(node_obj, channel_obj, start, end):
         node = MayaFacadeHelper.get_connected_animation_curve(channel_obj)
         if node is None:
             return

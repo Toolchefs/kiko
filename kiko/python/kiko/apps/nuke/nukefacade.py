@@ -504,12 +504,12 @@ class NukeFacade(BaseFacade):
         return k_channel_obj.evaluate(time)
 
     @staticmethod
-    def has_world_space_matrix(node):
-        return "matrix" in node.knobs()
+    def has_world_space_matrix(node_obj):
+        return "matrix" in node_obj.knobs()
 
     @staticmethod
-    def get_world_space_rotation_and_translation(node):
-        knob = node.knob('matrix')
+    def get_world_space_rotation_and_translation(node_obj):
+        knob = node_obj.knob('matrix')
 
         rm = NukeFacadeHelper.get_matrix_from_knob(knob)
         tm = nuke.math.Matrix4(rm)
@@ -523,18 +523,18 @@ class NukeFacade(BaseFacade):
         return (r.vx, r.vy, r.vz, r.s), t
 
     @staticmethod
-    def set_world_space_rotation_and_translation_at_time(node, time, rotation,
-                                                         translation):
+    def set_world_space_rotation_and_translation_at_time(node_obj, time,
+                                                         rotation, translation):
         q = nuke.math.Quaternion(rotation[3], *rotation[:3])
-        rot = NukeFacadeHelper.convert_to_euler(node, q)
+        rot = NukeFacadeHelper.convert_to_euler(node_obj, q)
 
-        k = node.knobs('useMatrix')
+        k = node_obj.knobs('useMatrix')
         if k:
             k.setValue(False)
 
         knob_values = {'translate': translation, 'rotate': rot}
         for kn, kv in knob_values.iteritems():
-            knob = node[kn]
+            knob = node_obj[kn]
 
             if not knob.isAnimated():
                 knob.setAnimated(True)
@@ -543,7 +543,7 @@ class NukeFacade(BaseFacade):
                 knob.setValueAt(kv[i], time, i)
 
     @staticmethod
-    def remove_animation_from_channel(node, channel_obj):
+    def remove_animation_from_channel(node_obj, channel_obj):
         knob = channel_obj[0]
         index = channel_obj[1]
 
@@ -551,9 +551,10 @@ class NukeFacade(BaseFacade):
 
 
     @staticmethod
-    def shift_animation_in_frame_range(node, channel_obj, start, end):
-        animation = NukeFacade.get_keyframable_channel_object(node, channel_obj,
-                                                            force_create=False)
+    def shift_animation_in_frame_range(node_obj, channel_obj, start, end):
+        animation = NukeFacade.get_keyframable_channel_object(node_obj,
+                                                              channel_obj,
+                                                              force_create=False)
         if animation is None:
             return
 
@@ -565,9 +566,10 @@ class NukeFacade(BaseFacade):
             c_key -= 1
 
     @staticmethod
-    def remove_animation_from_frame_range(node, channel_obj, start, end):
-        animation = NukeFacade.get_keyframable_channel_object(node, channel_obj,
-                                                            force_create=False)
+    def remove_animation_from_frame_range(node_obj, channel_obj, start, end):
+        animation = NukeFacade.get_keyframable_channel_object(node_obj,
+                                                              channel_obj,
+                                                              force_create=False)
         if animation is None:
             return
 
@@ -575,8 +577,8 @@ class NukeFacade(BaseFacade):
         c_key = len(keys) - 1
 
         keys_to_remove = []
-        while c_key > 0 and mfna.time(c_key).value() >= start:
-            if mfna.time(c_key).value() > end:
+        while c_key > 0 and keys[c_key].x >= start:
+            if keys[c_key].x > end:
                 c_key -= 1
                 continue
             keys_to_remove.append(keys[c_key])
@@ -588,7 +590,7 @@ class NukeFacade(BaseFacade):
     @staticmethod
     def post_import_keyframable_channel_object(k_channel_obj):
         # in this function we set the animation knob with TCL as nuke will
-        # forget everything about the curve tangents.
+        # forget everything about the curve tangents unless we do this
 
         knob = k_channel_obj.knob()
         index = k_channel_obj.knobIndex()
@@ -631,7 +633,7 @@ class NukeFacade(BaseFacade):
 
     @staticmethod
     def pre_export_keyframable_channel_object(k_channel_obj):
-        # Batch mode rulez, fixing broken them before exporting the knob
+        # Batch mode rulez, fixing broken tangents before exporting the knob
         # animation
         if not nuke.GUI:
             k_channel_obj.fixSlopes()
