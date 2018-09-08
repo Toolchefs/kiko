@@ -26,6 +26,10 @@ from kiko.io.kikofile import KikoFile
 class KikoManager(object):
 
     def __init__(self, facade=None):
+        """
+        :param facade: the app facade
+        """
+
         if facade is None or not issubclass(facade, BaseFacade):
             raise InvalidFacadeException('Invalid facade was provided.')
         self._facade = facade
@@ -37,8 +41,21 @@ class KikoManager(object):
     def export_to_file(self, file_name, objects=None, operators=None,
                        hierarchy=False, keep_previous_images=False,
                        start_frame=None, end_frame=None,
-                       force_op_evaluation=False, channel_filter=None,
-                       image_fps=None):
+                       force_op_evaluation=False, channel_filter=None):
+        """
+        :param file_name: the kiko file path, the file extension determines if
+                          a preview is going to be exported (kiko) or not (kb).
+        :param objects: The list of objects to processs
+        :param operators: list of operators to use for this export
+        :param hierarchy: enables the hierarchy mode
+        :param keep_previous_images: keeps the images contained by the kiko file
+                                     if it already exists
+        :param start_frame: the animation start frame
+        :param end_frame: the animation end frame
+        :param force_op_evaluation: force all operators evaluation
+        :param channel_filter: filter the list of channels to export
+        """
+
         if self._facade is None:
             raise InvalidFacadeException('Cannot export file without a facade. '
                                 'Please create a new kikoManager with a facade')
@@ -93,6 +110,31 @@ class KikoManager(object):
                          suffix_to_add=None, scale_using_fps=False,
                          frame_value=0, ignore_item_chunks=False,
                          start_frame=None, end_frame=None):
+        """
+        :param file_name: the kiko file path
+        :param objects: The list of objects to processs
+        :param item_op_priority: the priority list for item operators
+        :param channel_op_priority: the priority list for channel operators
+        :param import_obj_method: import object method
+        :param import_anim_method: the import animation method
+        :param str_replacements: a dictionary of string replacements for item
+                                 mapping
+        :param obj_mapping: object/channel mapping
+        :param prefix_to_add: a prefix to add to the item names for item
+                              matching
+        :param suffix_to_add: a suffix to add to the item names for item
+                              matching
+        :param scale_using_fps: scales the animation by using the ratio between
+                                the frame rate used when exporting the kiko file
+                                and the current scene frame rate
+        :param frame_value: a frame offset value
+        :param ignore_item_chunks: if True ignores item chunks/operators
+        :param start_frame: data stored in the kiko file for key frames before
+                            this value will be ignored
+        :param end_frame: data stored in the kiko file for key frames after
+                          this value will be ignored
+        """
+
         if self._facade is None:
             raise InvalidFacadeException('Cannot import file without a facade. '
                                 'Please create a new kikoManager with a facade')
@@ -180,6 +222,10 @@ class KikoManager(object):
 
 
     def get_root_from_file(self, file_name, flatten_hierarchy=False):
+        """
+        :param file_name: the kiko file path
+        :param flatten_hierarchy: flattens the hierarchy stored inside the file
+        """
         k_file = KikoFile(file_name)
         k_file.parse()
 
