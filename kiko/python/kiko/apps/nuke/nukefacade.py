@@ -154,7 +154,7 @@ class NukeFacade(BaseFacade):
 
     @staticmethod
     def map_app_channel_to_kiko_channel(node_obj, channel_name):
-        node_map = NUKE_NODE_TO_KIKO_CHANNELS.get(node_obj.apiType())
+        node_map = NUKE_NODE_TO_KIKO_CHANNELS.get(node_obj.Class())
         if node_map and channel_name in node_map:
             return node_map.get(channel_name)
         return NUKE_TO_KIKO_CHANNELS.get(channel_name) or channel_name
