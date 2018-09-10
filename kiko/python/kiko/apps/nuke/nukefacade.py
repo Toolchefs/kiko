@@ -411,9 +411,9 @@ class NukeFacade(BaseFacade):
     @staticmethod
     def set_channel_out_tangent_type_at_index(k_channel_obj, index, out_type):
         key = k_channel_obj.keys()[index]
-        key.interpolation = (KIKO_TO_NUKE_TANGENT_TYPES.get(out_type) or
-                             nuke.SMOOTH)
-
+        interpolation = KIKO_TO_NUKE_TANGENT_TYPES.get(out_type) or nuke.SMOOTH
+        k_channel_obj.changeInterpolation([key], interpolation)
+        
     @staticmethod
     def get_channel_out_tangent_angle_and_weight_at_index(k_channel_obj, index):
         keys = k_channel_obj.keys()
@@ -423,7 +423,7 @@ class NukeFacade(BaseFacade):
         else:
             weight = NukeFacadeHelper.tangent_length(k.x, k.y, k.rslope, k.ra,
                                                      keys[index + 1].x)
-
+            
         return NukeFacadeHelper.angle_from_slope(k.rslope), weight
 
     @staticmethod
@@ -431,16 +431,13 @@ class NukeFacade(BaseFacade):
                                                           angle, weight):
         keys = k_channel_obj.keys()
         k = keys[index]
-        k.rslope = math.atan(math.radians(angle))
-        print "out", k_channel_obj.knob().name()
-        print k.rslope, math.atan(math.radians(angle))
+        k.rslope = math.tan(math.radians(angle))
 
+        a = math.radians(angle)
+        
         if index < len(keys) - 1:
             k.ra = NukeFacadeHelper.tangent_length_from_angle_and_weight(weight,
-                                                angle, k.x, keys[index + 1].x)
-
-            print k.ra, NukeFacadeHelper.tangent_length_from_angle_and_weight(weight,
-                                                angle, k.x, keys[index + 1].x)
+                                                a, k.x, keys[index + 1].x)
 
     @staticmethod
     def get_channel_in_tangent_angle_and_weight_at_index(k_channel_obj, index):
@@ -451,7 +448,7 @@ class NukeFacade(BaseFacade):
         else:
             weight = NukeFacadeHelper.tangent_length(k.x, k.y, k.lslope, k.la,
                                                      keys[index - 1].x)
-
+            
         return NukeFacadeHelper.angle_from_slope(k.lslope), weight
 
     @staticmethod
@@ -459,15 +456,13 @@ class NukeFacade(BaseFacade):
                                                           angle, weight):
         keys = k_channel_obj.keys()
         k = keys[index]
-        k.lslope = math.atan(math.radians(angle))
-
+        k.lslope = math.tan(math.radians(angle))
+        
+        a = math.radians(angle)
+        
         if index > 0:
             k.la = NukeFacadeHelper.tangent_length_from_angle_and_weight(weight,
-                                                angle, k.x, keys[index - 1].x)
-
-            print k.la, NukeFacadeHelper.tangent_length_from_angle_and_weight(
-                weight, angle, k.x, keys[index - 1].x)
-
+                                                a, k.x, keys[index - 1].x)
 
     @staticmethod
     def get_channel_tangents_locked_at_index(k_channel_obj, index):
@@ -594,47 +589,54 @@ class NukeFacade(BaseFacade):
 
         knob = k_channel_obj.knob()
         index = k_channel_obj.knobIndex()
-
+    
         itc = {nuke.CONSTANT: 'K', nuke.LINEAR: 'L', nuke.SMOOTH: 'S',
-               nuke.HORIZONTAL: 'C', nuke.CUBIC: 'C', nuke.BREAK: 'C',
-               nuke.USER_SET_SLOPE: 'C'}
+               nuke.HORIZONTAL: 'C', nuke.CUBIC: 'C', nuke.BREAK: 'L',
+               nuke.CATMULL_ROM: 'R', nuke.USER_SET_SLOPE: 'S'}
 
+        keys = k_channel_obj.keys()
+    
         index_script = 'curve'
-        for k in k_channel_obj.keys():
+        
+        for i in range(len(keys)):
+            k = keys[i]
             k.la = 1.0 if k.la == 0.0 else k.la
             k.ra = 1.0 if k.ra == 0.0 else k.ra
-
+    
             index_script += (" " + itc[k.interpolation]
-                             if k.interpolation in itc else " C")
-
+                             if k.interpolation in itc else " S")
+            
+            if i in [0, len(keys) - 1] and k.extrapolation == nuke.LINEAR:
+                index_script += ' l'
+    
             index_script += ' x' + ' '.join([str(k.x), str(k.y)])
-            if k.interpolation != nuke.CONSTANT:
-                index_script += ' '.join(
+            if k.interpolation in [nuke.BREAK, nuke.USER_SET_SLOPE]:
+                index_script += ' ' + ' '.join(
                     ['s' + str(k.lslope), 't' + str(k.rslope), 'u' + str(k.la),
                      'v' + str(k.ra)])
-
+    
         scripts = []
         for t in knob.toScript().split('{'):
             if t == '':
                 continue
-
+    
             tts = t.split('}') if '}' in t else t.split(' ')
             for i in tts:
                 if i == '' or i.isspace():
                     continue
                 scripts.append(i)
-
+    
         scripts[index] = index_script
         for i in range(len(scripts)):
             if not unicode(scripts[i].replace(" ", "")).isnumeric():
                 scripts[i] = '{' + scripts[i] + '}'
-
+        
         knob.fromScript(" ".join(scripts))
 
     @staticmethod
     def pre_export_keyframable_channel_object(k_channel_obj):
-        # Batch mode rulez, fixing broken tangents before exporting the knob
-        # animation
+        # fixing broken tangents before exporting the knob animation, this is
+        # necessary in batch mode
         if not nuke.GUI:
             k_channel_obj.fixSlopes()
 
