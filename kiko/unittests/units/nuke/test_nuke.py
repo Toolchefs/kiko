@@ -57,45 +57,49 @@ class TestNuke(object):
     def tearDown(self):
         nuke.scriptClose()
 
-        os.unlink(self._kiko_file)
-        os.unlink(self._kb_file)
-
+        #os.unlink(self._kiko_file)
+        #os.unlink(self._kb_file)
 
     def _create_and_animate_axis_node(self, frame_range=None, factor=3):
         if frame_range is None:
             frame_range = self._facade.get_active_frame_range()
-
+    
         node = nuke.createNode('Axis')
-        for channel in self._facade.list_channels(node):
-            if isinstance(channel[0], nuke.Enumeration_Knob):
+        channels = [("translate", 0), ("translate", 1), ("translate", 2)]
+        channels += [("rotate", 0), ("rotate", 1), ("rotate", 2)]
+        channels += [("scaling", 0), ("scaling", 1), ("scaling", 2)]
+    
+        for channel in channels:
+            knob = node.knobs()[channel[0]]
+            if isinstance(knob, nuke.Enumeration_Knob):
                 value = random.randint(0, len(channel[0].values()) - 1)
                 self._facade.set_channel_value(node, channel, value)
                 continue
-            if isinstance(channel[0], nuke.Boolean_Knob):
+            if isinstance(knob, nuke.Boolean_Knob):
                 value = random.randint(0, 1)
                 self._facade.set_channel_value(node, channel, value)
                 continue
-
+        
             if factor == 1:
                 num_keys = frame_range[1] - frame_range[0]
             else:
-                num_keys = random.randint(3, (frame_range[1] -
-                                              frame_range[0]) / factor)
-
-            ko = self._facade.get_keyframable_channel_object(node, channel)
-
+                num_keys = random.randint(3, (
+                            frame_range[1] - frame_range[0]) / factor)
+        
+            knob.setAnimated(channel[1])
+            ko = knob.animation(channel[1])
+        
             for i in range(num_keys):
                 frame = random.randint(frame_range[0], frame_range[1])
                 value = random.randint(-100, 100)
                 self._facade.set_channel_key_frame(ko, frame, value)
-
+        
             value = random.randint(-100, 100)
-            #making sure there's a keyframe at the begining and end of animation
+            # making sure there's a keyframe at the begining and end of animation
             self._facade.set_channel_key_frame(ko, frame_range[0], value)
             self._facade.set_channel_key_frame(ko, frame_range[1], value)
-
+    
         return node
-
 
     def _export_import_simple_file_test_shared(self, file_):
         node1 = self._create_and_animate_axis_node()
@@ -108,10 +112,10 @@ class TestNuke(object):
         self._manager.import_from_file(file_, objects=[node2.name()],
                                        obj_mapping=obj_mapping,
                                        ignore_item_chunks=True)
+        
+        fmin, fmax = self._facade.get_active_frame_range()
 
-        min, max = self._facade.get_active_frame_range()
-
-        for i in  range(int(min), int(max)):
+        for i in range(int(fmin), int(fmax)):
             self._facade.move_to_frame(i)
             for channel in self._facade.list_channels(node1):
                 k1 = channel[0]
@@ -122,13 +126,9 @@ class TestNuke(object):
                     continue
 
                 k2 = node2.knob(k1.name())
-
-                if k1.name() == 'matrix':
-                    assert_true(floats_equal(k1.valueAt(i, channel[1]),
-                                             k2.valueAt(i, channel[1])))
-                else:
-                    assert_equal(math.ceil(k1.valueAt(i, channel[1])),
-                                 math.ceil(k2.valueAt(i, channel[1])))
+                
+                assert_true(floats_equal(k1.valueAt(i, channel[1]),
+                                         k2.valueAt(i, channel[1])))
 
     def export_import_simple_kiko_file_test(self):
         self._export_import_simple_file_test_shared(self._kiko_file)
@@ -220,12 +220,12 @@ class TestNuke(object):
 
         channels = ['translate', 'rotate']
 
-        for i in  range(int(min), int(max)):
+        for i in range(int(min), int(max)):
             self._facade.move_to_frame(i)
 
             for c in channels:
                 k1 = node1.knob(c)
                 k2 = node2.knob(c)
-                for i in range(3):
-                    assert_true(floats_equal(k1.valueAt(i, channel[1]),
-                                             k2.valueAt(i, channel[1])))
+                for ci in range(3):
+                    assert_true(floats_equal(k1.valueAt(i, ci),
+                                             k2.valueAt(i, ci)))
