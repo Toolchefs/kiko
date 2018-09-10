@@ -95,8 +95,11 @@ KIKO_TO_MAYA_TANGENT_TYPES = {
             KIKO_TANGENT_TYPES.PLATEAU  : MFnAnimCurve.kTangentPlateau,
             KIKO_TANGENT_TYPES.SPLINE   : MFnAnimCurve.kTangentSmooth,
             KIKO_TANGENT_TYPES.STEP     : MFnAnimCurve.kTangentStep,
-            KIKO_TANGENT_TYPES.STEPNEXT : MFnAnimCurve.kTangentStepNext}
+            KIKO_TANGENT_TYPES.STEPNEXT : MFnAnimCurve.kTangentStepNext,
+            KIKO_TANGENT_TYPES.USER_DEFINED: MFnAnimCurve.kTangentAuto}
 
 MAYA_TO_KIKO_TANGENT_TYPES = {}
 for k, v in KIKO_TO_MAYA_TANGENT_TYPES.iteritems():
     MAYA_TO_KIKO_TANGENT_TYPES[v] = k
+    
+MAYA_TO_KIKO_TANGENT_TYPES[MFnAnimCurve.kTangentAuto] = KIKO_TANGENT_TYPES.AUTO

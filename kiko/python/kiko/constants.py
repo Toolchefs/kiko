@@ -124,6 +124,7 @@ class KIKO_TANGENT_TYPES:
     FIXED = 'fixed'
     SPLINE = 'spline'
     STEP = 'step'
+    USER_DEFINED = 'userDefined'
 
     @classmethod
     def stepped_types(cls):

@@ -56,21 +56,22 @@ for k, v in NUKE_NODE_TO_KIKO_CHANNELS.iteritems():
 #TANGENTS TYPES
 ################################################################################
 KIKO_TO_NUKE_TANGENT_TYPES = {
-            KIKO_TANGENT_TYPES.AUTO     : nuke.CUBIC,
-            KIKO_TANGENT_TYPES.CLAMPED  : nuke.SMOOTH,
-            KIKO_TANGENT_TYPES.FIXED    : nuke.SMOOTH,
-            KIKO_TANGENT_TYPES.FLAT     : nuke.CUBIC,
-            KIKO_TANGENT_TYPES.LINEAR   : nuke.LINEAR,
-            KIKO_TANGENT_TYPES.PLATEAU  : nuke.CUBIC,
-            KIKO_TANGENT_TYPES.SPLINE   : nuke.CUBIC,
-            KIKO_TANGENT_TYPES.STEP     : nuke.CONSTANT,
+            KIKO_TANGENT_TYPES.AUTO         : nuke.CUBIC,
+            KIKO_TANGENT_TYPES.CLAMPED      : nuke.BREAK,
+            KIKO_TANGENT_TYPES.FIXED        : nuke.SMOOTH,
+            KIKO_TANGENT_TYPES.FLAT         : nuke.CUBIC,
+            KIKO_TANGENT_TYPES.LINEAR       : nuke.LINEAR,
+            KIKO_TANGENT_TYPES.PLATEAU      : nuke.CUBIC,
+            KIKO_TANGENT_TYPES.SPLINE       : nuke.CUBIC,
+            KIKO_TANGENT_TYPES.STEP         : nuke.CONSTANT,
             #although this is not correct we need to map STEPNEXT to something
-            KIKO_TANGENT_TYPES.STEPNEXT : nuke.CONSTANT}
+            KIKO_TANGENT_TYPES.STEPNEXT     : nuke.CONSTANT,
+            KIKO_TANGENT_TYPES.USER_DEFINED : nuke.USER_SET_SLOPE}
 
 NUKE_TO_KIKO_TANGENT_TYPES = {}
 for k, v in KIKO_TO_NUKE_TANGENT_TYPES.iteritems():
    NUKE_TO_KIKO_TANGENT_TYPES[v] = k
 
-for t in [nuke.USER_SET_SLOPE, nuke.CATMULL_ROM, nuke.BREAK, nuke.BEFORE_LINEAR,
-          nuke.BEFORE_CONST, nuke.AFTER_LINEAR, nuke.AFTER_CONST]:
+for t in [nuke.CATMULL_ROM, nuke.BEFORE_LINEAR, nuke.BEFORE_CONST,
+          nuke.AFTER_LINEAR, nuke.AFTER_CONST]:
     NUKE_TO_KIKO_TANGENT_TYPES[t] = KIKO_TANGENT_TYPES.FIXED
