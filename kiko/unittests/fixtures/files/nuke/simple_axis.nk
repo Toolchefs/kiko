@@ -1,21 +1,21 @@
-#! /usr/local/Nuke9.0v8/libnuke-9.0.8.so -nx
-version 9.0 v8
+#! /usr/local/Nuke11.1v1/libnuke-11.1.1.so -nx
+version 11.1 v1
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
-    <window x="105" y="155" w="1280" h="776" screen="0">
+    <window x="-4" y="-3" w="1920" h="1143" maximized="1" screen="0">
         <splitter orientation="1">
             <split size="40"/>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
                 <page id="Toolbar.1"/>
             </dock>
-            <split size="609" stretch="1"/>
+            <split size="1257" stretch="1"/>
             <splitter orientation="2">
-                <split size="420"/>
+                <split size="642"/>
                 <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
-                <split size="296"/>
-                <dock id="" activePageId="Curve Editor.1">
+                <split size="451"/>
+                <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -24,6 +24,8 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="615"/>
             <dock id="" activePageId="Properties.1">
                 <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="uk.co.thefoundry.scripteditor.1"/>
             </dock>
         </splitter>
     </window>
@@ -32,11 +34,18 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 Root {
  inputs 0
  name /home/daniele.federico/Documents/git/kiko/kiko/unittests/fixtures/files/nuke/simple_axis.nk
- frame 27
- format "1920 1080 0 0 1920 1080 1 HD"
+ frame 100
+ format "1920 1080 0 0 1920 1080 1 HD_1080"
  proxy_type scale
  proxy_format "960 540 0 0 960 540 1 HD Half"
+ colorManagement Nuke
  defaultViewerLUT "OCIO LUTs"
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
  addUserKnob {20 mariTab l Mari}
  addUserKnob {26 cmdStatus l "listen status" t "The status of Nuke's command port" T <b>Disabled</b>}
  addUserKnob {26 sendStatus l "send status" t "The status of Nuke's connection to Mari" T <b>Inactive</b>}
@@ -60,20 +69,11 @@ Root {
  mariLocation /usr/local/Mari2.6v1/mari
  addUserKnob {20 endGroup n -1}
 }
-Viewer {
- inputs 0
- frame 27
- frame_range 1-100
- name Viewer1
- xpos -40
- ypos -10
-}
 Axis2 {
  inputs 0
- translate {{curve i x1 0 L x7 5 S x15 1 s0 x27 30} {curve i x1 0 K x7 10 x15 4 S x27 -10} {curve l x4 0 k x7 6 s4 t-3 x15 4 s-3.799999952 t-0.75 l x27 -30}}
- rotate {{curve i x1 0 x7 3 x15 3 s-3.200000048 x27 -50} {curve i x1 0 x7 10 s-2 x15 20 s8 x27 -20} {curve i x1 0 R x7 20 L x15 15 s-0.9375 t-5 S x27 -10}}
+ translate {{curve i x1 0 L x7 5 S x15 1 s0 x27 30} {curve i K x1 0 x7 10 x15 4 S x27 -10} {curve l x4 0 k x7 6 s4 t-3 x15 4 s-3.799999952 t-0.75 l x27 -30}}
+ rotate {{curve i x1 0 x7 3 x15 3 s-3.200000048 x27 -50} {curve i x1 0 x7 10 s-2 x15 20 s8 x27 -20} {curve i x1 0 x7 20 s1.799999952 L x15 15 s-0.9375 t-5 S x27 -10}}
  name Axis1
- selected true
  xpos -403
- ypos -192
+ ypos -193
 }
