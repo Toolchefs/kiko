@@ -41,8 +41,7 @@ class BakeOperatorLoaderV1(BaseOperatorLoader):
             if import_anim_method == IMPORT_METHODS.ANIMATION.INSERT:
                 t -= start_frame
             times.append(frame_value + t * time_multiplier)
-            if d[VALUE]:
-                values.append(d[VALUE])
+            values.append(d[VALUE])
 
         if not values:
             return
