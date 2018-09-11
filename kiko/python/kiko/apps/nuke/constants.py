@@ -36,14 +36,15 @@ for k, v in KIKO_TO_NUKE_CHANNELS.iteritems():
     NUKE_TO_KIKO_CHANNELS[v] = k
 
 
-NUKE_NODE_TO_KIKO_CHANNELS = {'Camera2': {"uniform_scale": "cameraScale",
-                                          "focal": "focalLength",
-                                          "haperture": "hAperture",
-                                          "vaperture": "vAperture",
-                                          "near": "nearClipPlane",
-                                          "far": "farClipPlane",
-                                          "win_translate[0]": "hFilmOffset",
-                                          "win_translate[1]": "vFilmOffset"}}
+NUKE_NODE_TO_KIKO_CHANNELS = {'Camera': {"uniform_scale": "cameraScale",
+                                         "focal": "focalLength",
+                                         "haperture": "hAperture",
+                                         "vaperture": "vAperture",
+                                         "near": "nearClipPlane",
+                                         "far": "farClipPlane",
+                                         "win_translate[0]": "hFilmOffset",
+                                         "win_translate[1]": "vFilmOffset"}}
+NUKE_NODE_TO_KIKO_CHANNELS['Camera2'] = NUKE_NODE_TO_KIKO_CHANNELS['Camera']
 
 KIKO_TO_NUKE_NODE_CHANNELS = {}
 for k, v in NUKE_NODE_TO_KIKO_CHANNELS.iteritems():
@@ -56,13 +57,13 @@ for k, v in NUKE_NODE_TO_KIKO_CHANNELS.iteritems():
 #TANGENTS TYPES
 ################################################################################
 KIKO_TO_NUKE_TANGENT_TYPES = {
-            KIKO_TANGENT_TYPES.AUTO         : nuke.CUBIC,
-            KIKO_TANGENT_TYPES.CLAMPED      : nuke.BREAK,
+            KIKO_TANGENT_TYPES.AUTO         : nuke.SMOOTH,
+            KIKO_TANGENT_TYPES.CLAMPED      : nuke.SMOOTH,
             KIKO_TANGENT_TYPES.FIXED        : nuke.SMOOTH,
-            KIKO_TANGENT_TYPES.FLAT         : nuke.CUBIC,
+            KIKO_TANGENT_TYPES.FLAT         : nuke.SMOOTH,
             KIKO_TANGENT_TYPES.LINEAR       : nuke.LINEAR,
-            KIKO_TANGENT_TYPES.PLATEAU      : nuke.CUBIC,
-            KIKO_TANGENT_TYPES.SPLINE       : nuke.CUBIC,
+            KIKO_TANGENT_TYPES.PLATEAU      : nuke.SMOOTH,
+            KIKO_TANGENT_TYPES.SPLINE       : nuke.SMOOTH,
             KIKO_TANGENT_TYPES.STEP         : nuke.CONSTANT,
             #although this is not correct we need to map STEPNEXT to something
             KIKO_TANGENT_TYPES.STEPNEXT     : nuke.CONSTANT,
@@ -72,6 +73,11 @@ NUKE_TO_KIKO_TANGENT_TYPES = {}
 for k, v in KIKO_TO_NUKE_TANGENT_TYPES.iteritems():
    NUKE_TO_KIKO_TANGENT_TYPES[v] = k
 
+NUKE_TO_KIKO_TANGENT_TYPES[nuke.SMOOTH] = KIKO_TANGENT_TYPES.SPLINE
+NUKE_TO_KIKO_TANGENT_TYPES[nuke.CUBIC] = KIKO_TANGENT_TYPES.SPLINE
+NUKE_TO_KIKO_TANGENT_TYPES[nuke.USER_SET_SLOPE] = KIKO_TANGENT_TYPES.SPLINE
+NUKE_TO_KIKO_TANGENT_TYPES[nuke.BREAK] = KIKO_TANGENT_TYPES.LINEAR
+
 for t in [nuke.CATMULL_ROM, nuke.BEFORE_LINEAR, nuke.BEFORE_CONST,
           nuke.AFTER_LINEAR, nuke.AFTER_CONST]:
-    NUKE_TO_KIKO_TANGENT_TYPES[t] = KIKO_TANGENT_TYPES.FIXED
+    NUKE_TO_KIKO_TANGENT_TYPES[t] = KIKO_TANGENT_TYPES.SPLINE
