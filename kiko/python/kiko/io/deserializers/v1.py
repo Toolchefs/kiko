@@ -210,8 +210,8 @@ class _DeserializerV1Helper:
 
                 entry = names_to_item.get(name)
 
-                if isinstance(entry, list):
-                    for e in entry:
+                for e in entry:
+                    if isinstance(e, (list, tuple)):
                         cls._load_specified_channels(facade, e[0],
                                                      channel_op_priority, o,
                                                      import_anim_method,
@@ -219,11 +219,12 @@ class _DeserializerV1Helper:
                                                      frame_value,
                                                      time_multiplier,
                                                      (e[1], e[2]))
-                elif entry is not None:
-                    cls._load_item(facade, entry, item_op_priority,
-                                   channel_op_priority, o, import_anim_method,
-                                   start_frame, end_frame, frame_value,
-                                   time_multiplier)
+                    else:
+                        cls._load_item(facade, e, item_op_priority,
+                                       channel_op_priority, o,
+                                       import_anim_method,
+                                       start_frame, end_frame, frame_value,
+                                       time_multiplier)
         else:
             item_found = False
             for name, entry in names_to_item.iteritems():
@@ -236,8 +237,8 @@ class _DeserializerV1Helper:
 
                 item_found = True
 
-                if isinstance(entry, list):
-                    for e in entry:
+                for e in entry:
+                    if isinstance(e, (list, tuple)):
                         cls._load_specified_channels(facade, e[0],
                                                      channel_op_priority, o,
                                                      import_anim_method,
@@ -245,11 +246,12 @@ class _DeserializerV1Helper:
                                                      frame_value,
                                                      time_multiplier,
                                                      (e[1], e[2]))
-                else:
-                    cls._load_item(facade, entry, item_op_priority,
-                                   channel_op_priority, o, import_anim_method,
-                                   start_frame, end_frame, frame_value,
-                                   time_multiplier)
+                    else:
+                        cls._load_item(facade, e, item_op_priority,
+                                       channel_op_priority, o,
+                                       import_anim_method,
+                                       start_frame, end_frame, frame_value,
+                                       time_multiplier)
 
             if not item_found:
                 raise KikoDeserializeException("Could not find any object to "
@@ -276,6 +278,7 @@ class DeserializerV1(BaseDeserializer):
 
         if import_obj_method == IMPORT_METHODS.OBJECT.NAME:
             names_to_item = {}
+
             for child in root.iter_children():
                 name = child.name
 
@@ -291,7 +294,10 @@ class DeserializerV1(BaseDeserializer):
                                 continue
                             names_to_item[v[1]].append((child, v[0], v[2]))
                     else:
-                        names_to_item[value] = child
+                        if value in names_to_item:
+                            names_to_item[value].append(child)
+                        else:
+                            names_to_item[value] = [child]
                 else:
                     if str_replacements:
                         for key, value in str_replacements.iteritems():
@@ -303,7 +309,7 @@ class DeserializerV1(BaseDeserializer):
                     if prefix_to_add:
                         name = prefix_to_add + name
 
-                    names_to_item[name] = child
+                    names_to_item[name] = [child]
 
             if not names_to_item:
                 raise KikoDeserializeException("Could not find any object to "
