@@ -18,12 +18,10 @@ import tempfile
 
 import nuke
 
-from kiko.utils.value import floats_equal
-
 from kiko.constants import (APPS, KIKO_PREVIEW_MAXIMUM_SIZE,
                             KIKO_INFINITY_BEHAVIOR)
-from kiko.exceptions import FacadeRuntimeError, FacadeWarning
 from kiko.apps.basefacade import BaseFacade
+from kiko.utils.value import floats_equal
 
 from .constants import (KIKO_TO_NUKE_CHANNELS, NUKE_TO_KIKO_CHANNELS,
                         KIKO_TO_NUKE_TANGENT_TYPES, NUKE_TO_KIKO_TANGENT_TYPES,
@@ -412,18 +410,17 @@ class NukeFacade(BaseFacade):
     def set_channel_out_tangent_type_at_index(k_channel_obj, index, out_type):
         key = k_channel_obj.keys()[index]
         interpolation = KIKO_TO_NUKE_TANGENT_TYPES.get(out_type) or nuke.SMOOTH
-        k_channel_obj.changeInterpolation([key], interpolation)
-        
+        key.interpolation = interpolation
+
     @staticmethod
     def get_channel_out_tangent_angle_and_weight_at_index(k_channel_obj, index):
         keys = k_channel_obj.keys()
         k = keys[index]
         if index == len(keys) - 1:
-            weight = 1
-        else:
-            weight = NukeFacadeHelper.tangent_length(k.x, k.y, k.rslope, k.ra,
-                                                     keys[index + 1].x)
-            
+            return 0, 1
+
+        weight = NukeFacadeHelper.tangent_length(k.x, k.y, k.rslope, k.ra,
+                                                 keys[index + 1].x)
         return NukeFacadeHelper.angle_from_slope(k.rslope), weight
 
     @staticmethod
@@ -431,10 +428,10 @@ class NukeFacade(BaseFacade):
                                                           angle, weight):
         keys = k_channel_obj.keys()
         k = keys[index]
-        k.rslope = math.tan(math.radians(angle))
-
         a = math.radians(angle)
-        
+
+        k.rslope = math.tan(a)
+
         if index < len(keys) - 1:
             k.ra = NukeFacadeHelper.tangent_length_from_angle_and_weight(weight,
                                                 a, k.x, keys[index + 1].x)
@@ -444,11 +441,10 @@ class NukeFacade(BaseFacade):
         keys = k_channel_obj.keys()
         k = keys[index]
         if index == 0:
-            weight = 1
-        else:
-            weight = NukeFacadeHelper.tangent_length(k.x, k.y, k.lslope, k.la,
-                                                     keys[index - 1].x)
-            
+            return 0, 1
+
+        weight = NukeFacadeHelper.tangent_length(k.x, k.y, k.lslope, k.la,
+                                                 keys[index - 1].x)
         return NukeFacadeHelper.angle_from_slope(k.lslope), weight
 
     @staticmethod
@@ -456,10 +452,10 @@ class NukeFacade(BaseFacade):
                                                           angle, weight):
         keys = k_channel_obj.keys()
         k = keys[index]
-        k.lslope = math.tan(math.radians(angle))
-        
         a = math.radians(angle)
-        
+
+        k.lslope = math.tan(a)
+
         if index > 0:
             k.la = NukeFacadeHelper.tangent_length_from_angle_and_weight(weight,
                                                 a, k.x, keys[index - 1].x)
@@ -585,52 +581,82 @@ class NukeFacade(BaseFacade):
     @staticmethod
     def post_import_keyframable_channel_object(k_channel_obj):
         # in this function we set the animation knob with TCL as nuke will
-        # forget everything about the curve tangents unless we do this
+        # forget everything about the curve tangents unless we do this.
+        # Nuke python API provides now the the changeInterpolation method, but
+        # it's tricky to get the desired result by post-setting the tangent
+        # types
 
         knob = k_channel_obj.knob()
         index = k_channel_obj.knobIndex()
-    
+
         itc = {nuke.CONSTANT: 'K', nuke.LINEAR: 'L', nuke.SMOOTH: 'S',
-               nuke.HORIZONTAL: 'C', nuke.CUBIC: 'C', nuke.BREAK: 'L',
+               nuke.HORIZONTAL: 'C k', nuke.CUBIC: 'C', nuke.BREAK: 'L',
                nuke.CATMULL_ROM: 'R', nuke.USER_SET_SLOPE: 'S'}
 
         keys = k_channel_obj.keys()
-    
+
         index_script = 'curve'
-        
+
         for i in range(len(keys)):
             k = keys[i]
             k.la = 1.0 if k.la == 0.0 else k.la
             k.ra = 1.0 if k.ra == 0.0 else k.ra
-    
+
             index_script += (" " + itc[k.interpolation]
                              if k.interpolation in itc else " S")
-            
+
             if i in [0, len(keys) - 1] and k.extrapolation == nuke.LINEAR:
                 index_script += ' l'
-    
+
             index_script += ' x' + ' '.join([str(k.x), str(k.y)])
-            if k.interpolation in [nuke.BREAK, nuke.USER_SET_SLOPE]:
-                index_script += ' ' + ' '.join(
-                    ['s' + str(k.lslope), 't' + str(k.rslope), 'u' + str(k.la),
-                     'v' + str(k.ra)])
-    
+
+            if k.interpolation != nuke.CONSTANT:
+                if i == 0:
+                    if 0 < k.ra < 3:
+                        if (not floats_equal(k.lslope, k.rslope, places=5) and
+                                k.extrapolation == nuke.CONSTANT):
+                            index_script += ' ' + ' '.join(['s' + str(k.lslope),
+                                                            't' + str(k.rslope),
+                                                            'u' + str(k.la),
+                                                            'v' + str(k.ra)])
+                        else:
+                            index_script += ' ' + ' '.join(['s' + str(k.rslope),
+                                                        'u' + str(k.ra)])
+                elif i == len(keys) - 1:
+                    if 0 < k.la < 3:
+                        index_script += ' ' + ' '.join(['s' + str(k.lslope),
+                                                        'u' + str(k.la)])
+                        if (not floats_equal(k.lslope, k.rslope, places=5) and
+                                k.extrapolation == nuke.CONSTANT):
+                            index_script += ' ' + ' '.join(['t' + str(k.rslope),
+                                                            'v' + str(k.ra)])
+                else:
+                    if 0 < k.la < 3 and 0 < k.ra < 3:
+                        if floats_equal(k.lslope, k.rslope, places=5):
+                            index_script += ' s' + str(k.lslope)
+                            index_script += ' ' + ' '.join(['u' + str(k.la),
+                                                            'v' + str(k.ra)])
+                        else:
+                            index_script += ' ' + ' '.join(['s' + str(k.lslope),
+                                                            't' + str(k.rslope),
+                                                            'u' + str(k.la),
+                                                            'v' + str(k.ra)])
         scripts = []
         for t in knob.toScript().split('{'):
             if t == '':
                 continue
-    
+
             tts = t.split('}') if '}' in t else t.split(' ')
             for i in tts:
                 if i == '' or i.isspace():
                     continue
                 scripts.append(i)
-    
+
         scripts[index] = index_script
         for i in range(len(scripts)):
             if not unicode(scripts[i].replace(" ", "")).isnumeric():
                 scripts[i] = '{' + scripts[i] + '}'
-        
+
         knob.fromScript(" ".join(scripts))
 
     @staticmethod
