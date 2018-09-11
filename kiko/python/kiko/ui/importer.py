@@ -319,7 +319,6 @@ class KikoImporterDialog(QtWidgets.QDialog):
         selection = self._str_repl_table.selectedIndexes()
         valid_sel = bool(selection)
 
-        self._str_repl_add_row.setEnabled(valid_sel)
         self._str_repl_del_row.setEnabled(valid_sel)
         if valid_sel:
             self._str_repl_del_row.setProperty("row", selection[0].row())
@@ -420,4 +419,5 @@ class KikoImporterDialog(QtWidgets.QDialog):
                                               "file. Check the script editor "
                                               "for errros.")
 
-
+    def keyPressEvent(self, event):
+        return

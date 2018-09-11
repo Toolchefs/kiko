@@ -230,6 +230,7 @@ class DataTreeWidget(QtWidgets.QTreeView):
             self._menu = QtWidgets.QMenu(self)
             self._sel_item_a = self._menu.addAction("Map To Selected Item")
             self._sel_chan_a = self._menu.addAction("Map To Selected Channel")
+            self._unmap_a = self._menu.addAction("Remove Mapping")
             self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
             self.customContextMenuRequested.connect(self._show_menu)
             self._menu.triggered.connect(self._action_triggered)
@@ -261,7 +262,7 @@ class DataTreeWidget(QtWidgets.QTreeView):
             else:
                 QtWidgets.QMessageBox.critical(self, "Error",
                                                "No item is selected")
-        else:
+        elif action.text() == "Map To Selected Channel":
             f_chan = self._facade.get_selected_channel_names()
             if f_chan:
                 name = self._facade.get_name(self._facade.get_selection()[0])
@@ -270,6 +271,8 @@ class DataTreeWidget(QtWidgets.QTreeView):
             else:
                 QtWidgets.QMessageBox.critical(self, "Error",
                                                "No channel is selected")
+        else:
+            self._model.set_mapping_object(index, None)
 
     def _show_menu(self, point):
         selection = self.selectedIndexes()
@@ -284,6 +287,7 @@ class DataTreeWidget(QtWidgets.QTreeView):
 
         self._sel_item_a.setEnabled(is_item)
         self._sel_chan_a.setEnabled(is_channel)
+        self._unmap_a.setEnabled(entity.mapped is not None)
 
         point.setY(point.y() + self.header().height())
         self._menu.popup(self.mapToGlobal(point))
