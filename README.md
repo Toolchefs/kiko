@@ -16,7 +16,7 @@ We are looking for contributors who could help us making it work on others DCCs 
 
 Few things are missing, like UIs for Nuke, cross app tests, etc.
 
-Please be aware, every DCC handles animation curves differently, for this reason transferring animation curves between different apps might not always re-create totally similar curves.
+Please note, every DCC handles animation curves differently, for this reason transferring animation curves between different apps might not always re-create similar curves.
 
 ## Getting started
 
