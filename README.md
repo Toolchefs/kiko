@@ -23,7 +23,7 @@ Please note, every DCC handles animation curves differently, for this reason tra
 ### Installing
 Installing in Maya is quite easy.
 ```
-- copy the kiko folder under kiko/python in your maya scripts folder.
+- copy the kiko/python/kiko folder in your maya scripts folder.
 - copy the the kikoUndoer.py file in your maya plug-ins folder.
 - you can launch the maya importer and exporter UIs by running the code under kiko/extras/maya.
 ```
