@@ -63,10 +63,11 @@ def convert_camera_win_translates_to_kiko(node, knob, index, value, t=None):
 
 
 KIKO_TO_NUKE_CONVERTERS = {
-    'Camera2': {'haperture': convert_camera_aperture,
-                'vaperture': convert_camera_aperture,
-                'win_translate': convert_camera_win_translates}
+    'Camera': {'haperture': convert_camera_aperture,
+               'vaperture': convert_camera_aperture,
+               'win_translate': convert_camera_win_translates}
 }
+KIKO_TO_NUKE_CONVERTERS['Camera2'] = KIKO_TO_NUKE_CONVERTERS['Camera']
 
 NUKE_TO_KIKO_CONVERTERS = {
     'Camera2': {'haperture': convert_camera_aperture_to_kiko,

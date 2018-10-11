@@ -16,18 +16,20 @@ We are looking for contributors who could help us making it work on others DCCs 
 
 Few things are missing, like UIs for Nuke, cross app tests, etc.
 
+Please note, every DCC handles animation curves differently, for this reason transferring animation curves between different apps might not always re-create similar curves.
+
 ## Getting started
 
 ### Installing
 Installing in Maya is quite easy.
 ```
-- copy the kiko folder under kiko/python in your maya scripts folder.
+- copy the kiko/python/kiko folder in your maya scripts folder.
 - copy the the kikoUndoer.py file in your maya plug-ins folder.
 - you can launch the maya importer and exporter UIs by running the code under kiko/extras/maya.
 ```
 
 ## Running the tests
-We use nose for our unit tests. Currently we only support windows and osx, but feel free to create a run_linux.py file if you want to test it in that environment.
+We use nose for our unit tests. Currently we support windows, osx and linux.
 Your MAYA_PLUG_IN_PATH and proper python paths must be set for the unit tests to succeed.
 
 Once you environment is set up, you can run the run_win.py, run_osx.py or run_linux.py files inside the kiko/unittests folder. Please note, you might have to edit these files to point to your maya and nuke executables, you might also need to edit your PYTHONPATH to include all relevant paths.

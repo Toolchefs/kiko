@@ -16,9 +16,9 @@ if len(sys.argv) > 2:
 
 if app_name == 'maya':
     from units import maya as app_specific
-    from maya import cmds
     from maya import standalone
     standalone.initialize(name='python')
+    from maya import cmds
 
 elif app_name == 'nuke':
     from units import nuke as app_specific

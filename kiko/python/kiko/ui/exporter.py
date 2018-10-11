@@ -294,3 +294,6 @@ class KikoExporterDialog(QtWidgets.QDialog):
 
         QtWidgets.QMessageBox.information(self, "Success!", "KIKO file exported "
                                           "successfully!")
+
+    def keyPressEvent(self, event):
+        return
