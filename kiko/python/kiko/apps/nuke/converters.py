@@ -33,9 +33,33 @@ def convert_camera_win_translates(node, knob, index, value, t=None):
         else:
             va = node.knob("vaperture").valueAt(t)
 
-        h = nuke.root().format().height()
-        w = nuke.root().format().width()
+        h = float(nuke.root().format().height())
+        w = float(nuke.root().format().width())
         return (h / w) * 2 / va * (value * 25.4)
+    
+
+def convert_camera_aperture_to_kiko(node, knob, index, value, t=None):
+    # mm to inch conversion
+    return value / 25.4
+
+
+def convert_camera_win_translates_to_kiko(node, knob, index, value, t=None):
+    if index == 0:
+        if t is None:
+            ha = node.knob("haperture").value()
+        else:
+            ha = node.knob("haperture").valueAt(t)
+        
+        return value * ha / (2 * 25.4)
+    else:
+        if t is None:
+            va = node.knob("vaperture").value()
+        else:
+            va = node.knob("vaperture").valueAt(t)
+
+        h = float(nuke.root().format().height())
+        w = float(nuke.root().format().width())
+        return (w * value * va) / (2 * h * 25.4)
 
 
 KIKO_TO_NUKE_CONVERTERS = {
@@ -44,9 +68,22 @@ KIKO_TO_NUKE_CONVERTERS = {
                 'win_translate': convert_camera_win_translates}
 }
 
+NUKE_TO_KIKO_CONVERTERS = {
+    'Camera2': {'haperture': convert_camera_aperture_to_kiko,
+                'vaperture': convert_camera_aperture_to_kiko,
+                'win_translate': convert_camera_win_translates_to_kiko}
+}
+
 
 def get_kiko_to_nuke_converter(node, knob):
     nd = KIKO_TO_NUKE_CONVERTERS.get(node.Class())
+    if nd is None:
+        return
+    return nd.get(knob.name())
+
+
+def get_nuke_to_kiko_converter(node, knob):
+    nd = NUKE_TO_KIKO_CONVERTERS.get(node.Class())
     if nd is None:
         return
     return nd.get(knob.name())

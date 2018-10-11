@@ -28,7 +28,7 @@ from kiko.apps.basefacade import BaseFacade
 from .constants import (KIKO_TO_NUKE_CHANNELS, NUKE_TO_KIKO_CHANNELS,
                         KIKO_TO_NUKE_TANGENT_TYPES, NUKE_TO_KIKO_TANGENT_TYPES,
                         NUKE_NODE_TO_KIKO_CHANNELS, KIKO_TO_NUKE_NODE_CHANNELS)
-from .converters import get_kiko_to_nuke_converter
+from .converters import get_kiko_to_nuke_converter, get_nuke_to_kiko_converter
 
 
 class NukeFacadeHelper(object):
@@ -224,14 +224,18 @@ class NukeFacade(BaseFacade):
             return int(val)
         if isinstance(knob, nuke.Boolean_Knob):
             return bool(val)
-        return val
 
+        converter = get_nuke_to_kiko_converter(node_obj, knob)
+        if converter:
+            val = converter(node_obj, knob, index, val)
+
+        return val
 
     @staticmethod
     def set_channel_value(node_obj, channel_obj, value):
         knob = channel_obj[0]
         index = channel_obj[1]
-
+        
         converter = get_kiko_to_nuke_converter(node_obj, knob)
         if converter:
             value = converter(node_obj, knob, index, value)
@@ -488,7 +492,14 @@ class NukeFacade(BaseFacade):
 
     @staticmethod
     def get_channel_value_at_index(k_channel_obj, index):
-        return k_channel_obj.keys()[index].y
+        knob = k_channel_obj.knob()
+        node_obj = knob.node()
+        
+        converter = get_nuke_to_kiko_converter(node_obj, knob)
+        value = k_channel_obj.keys()[index].y
+        if converter:
+            value = converter(node_obj, knob, index, value)
+        return value
 
     @staticmethod
     def get_channel_time_at_index(k_channel_obj, index):
@@ -496,7 +507,15 @@ class NukeFacade(BaseFacade):
 
     @staticmethod
     def get_channel_value_at_time(k_channel_obj, time):
-        return k_channel_obj.evaluate(time)
+        knob = k_channel_obj.knob()
+        index = k_channel_obj.knobIndex()
+        node_obj = knob.node()
+    
+        converter = get_nuke_to_kiko_converter(node_obj, knob)
+        value = k_channel_obj.evaluate(time)
+        if converter:
+            value = converter(node_obj, knob, index, value)
+        return value
 
     @staticmethod
     def has_world_space_matrix(node_obj):
