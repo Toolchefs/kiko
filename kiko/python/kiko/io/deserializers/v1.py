@@ -209,6 +209,10 @@ class _DeserializerV1Helper:
                 name = facade.get_name(o)
 
                 entry = names_to_item.get(name)
+                if entry is None:
+                    warnings.warn("Could not find object %s" % name,
+                                  KikoWarning)
+                    continue
 
                 for e in entry:
                     if isinstance(e, (list, tuple)):
