@@ -18,12 +18,15 @@ import math
 import warnings
 import tempfile
 
+from shiboken2 import wrapInstance
+from maya import OpenMayaUI as omui
 from maya import OpenMaya, OpenMayaAnim
 from maya import cmds
 
 from kiko.constants import APPS, KIKO_PREVIEW_MAXIMUM_SIZE
 from kiko.exceptions import FacadeRuntimeError, FacadeWarning
 from kiko.apps.basefacade import BaseFacade
+from kiko.ui.qthandler import QtWidgets
 
 from .constants import (MAYA_TO_KIKO_CHANNELS, KIKO_TO_MAYA_CHANNELS, FPS,
                         KIKO_TO_MAYA_INFINITY_BEHAVIOR,
@@ -282,6 +285,13 @@ class MayaFacadeHelper(object):
                 vector[i] = OpenMaya.MDistance(vector[i]).asUnits(
                                                OpenMaya.MDistance.uiUnit())
         return vector
+
+    @staticmethod
+    def get_main_window():
+        main_window_ptr = omui.MQtUtil.mainWindow()
+        main_window = wrapInstance(long(main_window_ptr), QtWidgets.QMainWindow)
+
+        return main_window
 
 class MayaFacade(BaseFacade):
 
