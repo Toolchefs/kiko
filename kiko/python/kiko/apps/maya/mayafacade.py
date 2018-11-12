@@ -556,7 +556,7 @@ class MayaFacade(BaseFacade):
     @staticmethod
     def move_to_frame(frame):
         anim_control = OpenMayaAnim.MAnimControl()
-        anim_control.setCurrentTime(OpenMaya.MTime(frame))
+        anim_control.setCurrentTime(OpenMaya.MTime(frame, OpenMaya.MTime.uiUnit()))
 
     @staticmethod
     def get_active_frame_range():
