@@ -49,8 +49,8 @@ if PYSIDE_VERSION == 1:
             QtGui.QHeaderView.setResizeMode)
     setattr(QtWidgets.QHeaderView, "setSectionsMovable",
             QtGui.QHeaderView.setMovable)
-    setattr(QtWidgets.QHeaderView, "setClickable",
-            QtGui.QHeaderView.setSectionsClickable)
+    setattr(QtWidgets.QHeaderView, "setSectionsClickable",
+            QtGui.QHeaderView.setClickable)
 
 
 
