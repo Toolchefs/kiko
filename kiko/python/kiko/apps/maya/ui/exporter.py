@@ -13,9 +13,10 @@
 # ==============================================================================
 
 
-from kiko.ui.qthandler import QtWidgets
+from kiko.ui.qthandler import QtWidgets, QtCore
 
 from kiko.apps.maya import manager
+from kiko.apps.maya.mayafacade import MayaFacadeHelper
 from kiko.apps.maya.mayapreferences import MayaPreferences
 from kiko.ui.exporter import KikoExporterDialog
 from kiko.ui.mixed import create_box_layout, ORIENTATION
@@ -60,5 +61,5 @@ class MayaExporterDialog(KikoExporterDialog):
         super(MayaExporterDialog, self).__init__(manager.MayaKikoManager(),
                             app_preference_widget=MayaExporterPreferences())
 
-
-
+        self.setParent(MayaFacadeHelper.get_main_window())
+        self.setWindowFlags(QtCore.Qt.Window)
