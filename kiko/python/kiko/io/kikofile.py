@@ -36,8 +36,8 @@ class KikoFile(object):
             ext = KIKO_FILE_EXTENSION
             file_path = f + KIKO_FILE_EXTENSION
         elif ext not in [KIKO_FILE_EXTENSION, KB_FILE_EXTENSION]:
-            raise FileManagerError("File extension must be %s" %
-                                   "or ".join([KIKO_FILE_EXTENSION,
+            raise FileManagerError("File extension must be %s " %
+                                   " or ".join([KIKO_FILE_EXTENSION,
                                                 KB_FILE_EXTENSION]))
 
         self._data_only = ext == KB_FILE_EXTENSION
