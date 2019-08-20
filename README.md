@@ -45,7 +45,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## License
 
-This project is licensed under [the LPGP license](http://www.gnu.org/licenses/).
+This project is licensed under [the LGPL license](http://www.gnu.org/licenses/).
 
 ## Contact us
 
