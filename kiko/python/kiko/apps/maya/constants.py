@@ -33,7 +33,9 @@ FPS = {MTime.k100FPS: 100, MTime.k10FPS: 10, MTime.k1200FPS: 1200,
        MTime.kNTSCField: 60, MTime.kNTSCFrame: 30, MTime.kPALField: 50,
        MTime.kPALFrame: 25, MTime.kShowScan:48, MTime.kHours: 0.00277,
        MTime.kMilliseconds: 1000, MTime.kMinutes: 0.0166, MTime.kSeconds: 1,
-       MTime.kInvalid: None}
+       MTime.k23_976FPS: 23.976, MTime.k29_97FPS: 29.97,
+       MTime.k29_97DF: 29.97, MTime.k47_952FPS: 47.952,
+       MTime.k59_94FPS: 59.94, MTime.kInvalid: None}
 
 ################################################################################
 # CHANNEL NAMES
