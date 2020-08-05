@@ -12,15 +12,17 @@
 #
 # ==============================================================================
 
+import sys
 from collections import OrderedDict
 
 from kiko.exceptions import InvalidClassException, InvalidFacadeException
 from kiko.operators.baseoperator import BaseOperator
 from kiko.apps.basefacade import BaseFacade
 from kiko.utils.patterns import Singleton
+from kiko.vendor import six
 
+@six.add_metaclass(Singleton)
 class OperatorsFactory(object):
-    __metaclass__ = Singleton
 
     def __init__(self):
         self._entries = OrderedDict()
@@ -73,7 +75,6 @@ class OperatorsFactory(object):
         res = set()
         for versions in self._entries.values():
             for c in versions.values():
-                import os
                 if not c.is_channel_operator() and (app is None or
                                                     c.is_app_supported(app)):
                     res.add(c.name())
@@ -97,7 +98,7 @@ class OperatorsFactory(object):
         if not name in self._entries:
             return None
 
-        versions = self._entries[name].keys()
+        versions = list(self._entries[name].keys())
         versions.sort()
         return versions[-1]
 

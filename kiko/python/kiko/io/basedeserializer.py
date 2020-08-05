@@ -18,9 +18,10 @@ from abc import ABCMeta, abstractmethod
 from kiko.constants import IMPORT_METHODS
 from kiko.exceptions import InvalidFacadeException
 from kiko.apps.basefacade import BaseFacade
+from kiko.vendor import six
 
+@six.add_metaclass(ABCMeta)
 class BaseDeserializer(object):
-    __metaclass__ = ABCMeta
 
     def __init__(self, facade):
         if not issubclass(facade, BaseFacade):

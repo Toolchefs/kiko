@@ -14,11 +14,12 @@
 
 from abc import ABCMeta, abstractmethod
 
+from kiko.vendor import six
 from kiko.exceptions import (InvalidParentChunkExpception, InvalidOperation,
                              InvalidOperatorName)
 
+@six.add_metaclass(ABCMeta)
 class Chunk(object):
-    __metaclass__ = ABCMeta
     _parent_type = type(None)
 
     def __init__(self, parent, operator=None, operator_name=None,

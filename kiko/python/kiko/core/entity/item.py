@@ -18,10 +18,11 @@ from abc import ABCMeta, abstractmethod
 
 from kiko.exceptions import InvalidItemException
 from kiko.core.entity.handlers import channelhandler, chunkhandler, maptohandler
+from kiko.vendor import six
 
+@six.add_metaclass(ABCMeta)
 class BaseItem(channelhandler.ChannelHandler, chunkhandler.ChunkHandler,
                maptohandler.MapToHandler):
-    __metaclass__ = ABCMeta
 
     _parent_type = type(None)
     _child_type = type(None)
