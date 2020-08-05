@@ -14,6 +14,7 @@
 
 
 import re
+import sys
 import math
 import warnings
 import tempfile
@@ -288,7 +289,15 @@ class MayaFacadeHelper(object):
     @staticmethod
     def get_main_window():
         main_window_ptr = omui.MQtUtil.mainWindow()
-        main_window = shiboken.wrapInstance(long(main_window_ptr), QtWidgets.QMainWindow)
+
+        # Support for Python 2
+        if sys.version_info.major < 3:
+            main_window_ptr = long(main_window_ptr)
+        else:
+            main_window_ptr = int(main_window_ptr)
+
+        main_window = shiboken.wrapInstance(main_window_ptr,
+                                            QtWidgets.QMainWindow)
 
         return main_window
 
@@ -837,7 +846,7 @@ class MayaFacade(BaseFacade):
              'rx': math.degrees(r.x), 'ry': math.degrees(r.y),
              'rz':math.degrees(r.z)}
 
-        for name, value in d.iteritems():
+        for name, value in d.items():
             plug = mfn.findPlug(name)
             kco = MayaFacade.get_keyframable_channel_object(node_obj, plug)
             # this might happen when having incoming connectiosn to this plug
