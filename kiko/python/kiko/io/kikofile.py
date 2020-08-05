@@ -59,7 +59,7 @@ class KikoFile(object):
     @classmethod
     def _add_to_tar_from_dict(cls, tar_file, name, data):
         io = StringIO.StringIO()
-        json.dump(data, io)
+        json.dump(data, io, indent=2, sort_keys=True)
         io.seek(0)
         cls._add_to_tar(tar_file, name, io)
 
@@ -96,7 +96,7 @@ class KikoFile(object):
 
     def _save_data_only(self):
         f = open(self._file_path, 'wb')
-        json.dump(self._data, f)
+        json.dump(self._data, f, indent=2, sort_keys=True)
         f.close()
 
     @property
