@@ -103,9 +103,8 @@ class KikoFile(object):
         tar_file.close()
 
     def _save_data_only(self):
-        f = open(self._file_path, 'wb')
-        json.dump(self._data, f)
-        f.close()
+        with open(self._file_path, 'w') as f:
+            json.dump(self._data, f)
 
     @property
     def version(self):
