@@ -16,8 +16,16 @@ import os
 import time
 import tarfile
 import json
-import StringIO
 import pprint
+
+try:
+    # Python 3
+    from io import StringIO
+
+except ImportError:
+    # Python 2
+    from StringIO import StringIO
+
 
 from kiko.exceptions import FileManagerError, KikoWarning
 from kiko.constants import (KIKO_FILE_VERSION, KIKO_FILE_EXTENSION, KIKO_FILE,
