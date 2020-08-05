@@ -12,13 +12,12 @@
 #
 # ==============================================================================
 
-from types import NoneType
 from collections import OrderedDict
 
 from kiko.exceptions import InvalidChannelException
 
 class ChannelHandler(object):
-    _channel_type = NoneType
+    _channel_type = type(None)
 
     def __init__(self):
         self._channels = OrderedDict()

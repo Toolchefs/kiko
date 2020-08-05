@@ -12,15 +12,14 @@
 #
 # ==============================================================================
 
-from types import NoneType
 from collections import OrderedDict
 
 from kiko.exceptions import InvalidItemException, InvalidChunkException
 from kiko.core.entity.handlers import chunkhandler, maptohandler
 
 class Channel(chunkhandler.ChunkHandler, maptohandler.MapToHandler):
-    _parent_type = NoneType
-    _chunk_type = NoneType
+    _parent_type = type(None)
+    _chunk_type = type(None)
 
     def __init__(self, parent, name):
         chunkhandler.ChunkHandler.__init__(self)

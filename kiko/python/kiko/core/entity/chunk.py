@@ -12,8 +12,6 @@
 #
 # ==============================================================================
 
-from types import NoneType
-
 from abc import ABCMeta, abstractmethod
 
 from kiko.exceptions import (InvalidParentChunkExpception, InvalidOperation,
@@ -21,7 +19,7 @@ from kiko.exceptions import (InvalidParentChunkExpception, InvalidOperation,
 
 class Chunk(object):
     __metaclass__ = ABCMeta
-    _parent_type = NoneType
+    _parent_type = type(None)
 
     def __init__(self, parent, operator=None, operator_name=None,
                  operator_ver=None):
