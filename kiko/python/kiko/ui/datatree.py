@@ -12,7 +12,7 @@
 #
 # ==============================================================================
 
-from qthandler import QtGui, QtWidgets, QtCore
+from .qthandler import QtGui, QtWidgets, QtCore
 
 from kiko.core.entity.item import BaseItem
 from kiko.core.entity.channel import Channel
