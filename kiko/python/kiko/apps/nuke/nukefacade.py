@@ -13,7 +13,6 @@
 # ==============================================================================
 
 import math
-import warnings
 import tempfile
 
 import nuke

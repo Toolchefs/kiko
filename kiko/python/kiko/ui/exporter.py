@@ -14,7 +14,7 @@
 
 import os
 
-from qthandler import QtWidgets, QtGui, QtCore
+from .qthandler import QtWidgets, QtGui, QtCore
 
 from kiko.constants import KIKO_FILE_EXTENSION, KB_FILE_EXTENSION
 from kiko.operators.factory import OperatorsFactory

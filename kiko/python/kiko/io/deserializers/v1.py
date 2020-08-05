@@ -14,8 +14,6 @@
 
 import warnings
 
-from kiko.exceptions import KikoDeserializeException
-
 from kiko.constants import (KIKO_FILE_VERSION, SERIALIZATION_TYPES,
                             SERIALIZATION, IMPORT_METHODS)
 from kiko.exceptions import (KikoDeserializeException, InvalidOperator,
