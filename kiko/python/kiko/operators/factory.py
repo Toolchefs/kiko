@@ -52,8 +52,8 @@ class OperatorsFactory(object):
             return self._entries.keys()
 
         res = set()
-        for versions in self._entries.itervalues():
-            for c in versions.itervalues():
+        for versions in self._entries.values():
+            for c in versions.values():
                 if c.is_app_supported(app):
                     res.add(c.name())
                 break
@@ -61,8 +61,8 @@ class OperatorsFactory(object):
 
     def get_channel_operator_names(self, app=None):
         res = set()
-        for versions in self._entries.itervalues():
-            for c in versions.itervalues():
+        for versions in self._entries.values():
+            for c in versions.values():
                 if c.is_channel_operator() and (app is None or
                                                 c.is_app_supported(app)):
                     res.add(c.name())
@@ -71,8 +71,8 @@ class OperatorsFactory(object):
 
     def get_item_operator_names(self, app=None):
         res = set()
-        for versions in self._entries.itervalues():
-            for c in versions.itervalues():
+        for versions in self._entries.values():
+            for c in versions.values():
                 import os
                 if not c.is_channel_operator() and (app is None or
                                                     c.is_app_supported(app)):

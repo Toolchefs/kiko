@@ -33,7 +33,7 @@ class ChunkHandler(object):
         return self._chunks.keys()
 
     def iter_chunks(self):
-        for c in self._chunks.itervalues():
+        for c in self._chunks.values():
             yield c
 
     def remove_chunk(self, chunk):

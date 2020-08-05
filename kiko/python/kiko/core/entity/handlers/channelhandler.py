@@ -33,7 +33,7 @@ class ChannelHandler(object):
         return self._channels.keys()
 
     def iter_channels(self):
-        for c in self._channels.itervalues():
+        for c in self._channels.values():
             yield c
 
     def remove_channel(self, channel):

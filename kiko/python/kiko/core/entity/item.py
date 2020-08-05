@@ -92,7 +92,7 @@ class BaseItem(channelhandler.ChannelHandler, chunkhandler.ChunkHandler,
         return self._children.keys()
 
     def iter_children(self):
-        for c in self._children.itervalues():
+        for c in self._children.values():
             yield c
 
     def remove_child(self, child):
