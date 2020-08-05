@@ -53,7 +53,7 @@ KIKO_TO_MAYA_CHANNELS = {KIKO_STD_CHANNEL_NAMES.TX: 'tx',
                          KIKO_STD_CHANNEL_NAMES.RO: 'ro'}
 
 MAYA_TO_KIKO_CHANNELS = {}
-for k, v in KIKO_TO_MAYA_CHANNELS.iteritems():
+for k, v in KIKO_TO_MAYA_CHANNELS.items():
     MAYA_TO_KIKO_CHANNELS[v] = k
 
 MAYA_NODE_TO_KIKO_CHANNELS = {MFn.kCamera: {"cs": "cameraScale",
@@ -65,9 +65,9 @@ MAYA_NODE_TO_KIKO_CHANNELS = {MFn.kCamera: {"cs": "cameraScale",
                                             "hfo": "hFilmOffset",
                                             "vfo": "vFilmOffset"}}
 KIKO_TO_MAYA_NODE_CHANNELS = {}
-for k, v in MAYA_NODE_TO_KIKO_CHANNELS.iteritems():
+for k, v in MAYA_NODE_TO_KIKO_CHANNELS.items():
     KIKO_TO_MAYA_NODE_CHANNELS[k] = {}
-    for ck, cv in v.iteritems():
+    for ck, cv in v.items():
         KIKO_TO_MAYA_NODE_CHANNELS[k][cv] = ck
 
 
@@ -82,7 +82,7 @@ KIKO_TO_MAYA_INFINITY_BEHAVIOR = {
             KIKO_INFINITY_BEHAVIOR.CYCLE_RELATIVE: MFnAnimCurve.kCycleRelative}
 
 MAYA_TO_KIKO_INFINITY_BEHAVIOR = {}
-for k, v in KIKO_TO_MAYA_INFINITY_BEHAVIOR.iteritems():
+for k, v in KIKO_TO_MAYA_INFINITY_BEHAVIOR.items():
     MAYA_TO_KIKO_INFINITY_BEHAVIOR[v] = k
 
 ################################################################################
@@ -101,7 +101,7 @@ KIKO_TO_MAYA_TANGENT_TYPES = {
             KIKO_TANGENT_TYPES.USER_DEFINED: MFnAnimCurve.kTangentAuto}
 
 MAYA_TO_KIKO_TANGENT_TYPES = {}
-for k, v in KIKO_TO_MAYA_TANGENT_TYPES.iteritems():
+for k, v in KIKO_TO_MAYA_TANGENT_TYPES.items():
     MAYA_TO_KIKO_TANGENT_TYPES[v] = k
     
 MAYA_TO_KIKO_TANGENT_TYPES[MFnAnimCurve.kTangentAuto] = KIKO_TANGENT_TYPES.AUTO

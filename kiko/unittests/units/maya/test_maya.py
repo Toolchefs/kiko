@@ -725,7 +725,7 @@ class TestMaya(object):
         original_values = {}
 
         #create channels and set default
-        for at, ty in attr_types.iteritems():
+        for at, ty in attr_types.items():
             an = '_'.join([base_name, at])
             if at == 'enum':
                 cmds.addAttr(ln=an, at=at, en='string1:string2:string3')
@@ -743,7 +743,7 @@ class TestMaya(object):
             channels[at] = facade.get_channel_object(obj, an)
 
         facade.pre_import()
-        for at, chan in channels.iteritems():
+        for at, chan in channels.items():
             if at == 'enum':
                 facade.set_channel_value(obj, chan, 2)
             elif at == 'string':
@@ -754,7 +754,7 @@ class TestMaya(object):
         facade.post_import()
 
         cmds.undo()
-        for at, chan in channels.iteritems():
+        for at, chan in channels.items():
             an = '_'.join([base_name, at])
             if at in ['enum', 'string']:
                 assert_equal(original_values[at], cmds.getAttr(l1 + "." + an))
@@ -879,7 +879,7 @@ class TestMaya(object):
         for i in range(int(min + fd), int(max - fd) + 1):
             cmds.currentTime(i)
             for attr in TRANSFORM_ATTR:
-                for obj1, obj2 in obj_mapping.iteritems():
+                for obj1, obj2 in obj_mapping.items():
                     assert_true(floats_equal(cmds.getAttr(obj1 + attr),
                                              cmds.getAttr(obj2 + attr)))
 
@@ -910,7 +910,7 @@ class TestMaya(object):
                             start_frame=min + fd, end_frame=max - fd)
 
         for attr in TRANSFORM_ATTR:
-            for obj1, obj2 in obj_mapping.iteritems():
+            for obj1, obj2 in obj_mapping.items():
                 frames = cmds.keyframe(obj2 + attr, q=True, tc=True)
                 if frames is None:
                     assert_true(floats_equal(cmds.getAttr(obj1 + attr),
@@ -952,7 +952,7 @@ class TestMaya(object):
 
         for i in  range(int(min), int(max)):
             cmds.currentTime(i)
-            for attr1, attr2 in obj_mapping.iteritems():
+            for attr1, attr2 in obj_mapping.items():
                 assert_true(floats_equal(cmds.getAttr(attr1),
                                           cmds.getAttr(attr2)))
 

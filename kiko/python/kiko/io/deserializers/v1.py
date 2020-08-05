@@ -231,7 +231,7 @@ class _DeserializerV1Helper:
                                        time_multiplier)
         else:
             item_found = False
-            for name, entry in names_to_item.iteritems():
+            for name, entry in names_to_item.items():
                 o = facade.get_node_by_name(name)
 
                 if o is None:
@@ -304,7 +304,7 @@ class DeserializerV1(BaseDeserializer):
                             names_to_item[value] = [child]
                 else:
                     if str_replacements:
-                        for key, value in str_replacements.iteritems():
+                        for key, value in str_replacements.items():
                             name = name.replace(key, value)
 
                     if suffix_to_add:

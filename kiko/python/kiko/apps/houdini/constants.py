@@ -33,7 +33,7 @@ KIKO_TO_HOU_CHANNELS = {KIKO_STD_CHANNEL_NAMES.TX: 'tx',
                         KIKO_STD_CHANNEL_NAMES.RO: 'ro'}
 
 HOU_TO_KIKO_CHANNELS = {}
-for k, v in KIKO_TO_HOU_CHANNELS.iteritems():
+for k, v in KIKO_TO_HOU_CHANNELS.items():
     HOU_TO_KIKO_CHANNELS[v] = k
 
 
@@ -51,7 +51,7 @@ else:
     KIKO_TO_HOU_INFINITY_BEHAVIOR = {}
 
 HOU_TO_KIKO_INFINITY_BEHAVIOR = {}
-for k, v in KIKO_TO_HOU_INFINITY_BEHAVIOR.iteritems():
+for k, v in KIKO_TO_HOU_INFINITY_BEHAVIOR.items():
     HOU_TO_KIKO_INFINITY_BEHAVIOR[v] = k
 
 ################################################################################
@@ -72,7 +72,7 @@ KIKO_TO_HOU_TANGENT_TYPES = {
             KIKO_TANGENT_TYPES.USER_DEFINED: "cubic()"}
 
 HOU_TO_KIKO_TANGENT_TYPES = {}
-for k, v in KIKO_TO_HOU_TANGENT_TYPES.iteritems():
+for k, v in KIKO_TO_HOU_TANGENT_TYPES.items():
     HOU_TO_KIKO_TANGENT_TYPES[v] = k
     
 HOU_TO_KIKO_TANGENT_TYPES["bezier()"] = KIKO_TANGENT_TYPES.AUTO

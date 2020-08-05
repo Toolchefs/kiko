@@ -543,7 +543,7 @@ class NukeFacade(BaseFacade):
             k.setValue(False)
 
         knob_values = {'translate': translation, 'rotate': rot}
-        for kn, kv in knob_values.iteritems():
+        for kn, kv in knob_values.items():
             knob = node_obj[kn]
 
             if not knob.isAnimated():

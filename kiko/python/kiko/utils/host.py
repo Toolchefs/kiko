@@ -27,7 +27,7 @@ def get_host():
                     APPS.NUKE: 'nuke',
                     APPS.HOUDINI: 'hou'}
 
-    for key, value in module_dicts.iteritems():
+    for key, value in module_dicts.items():
         try:
             __import__(value)
             _HOST = key

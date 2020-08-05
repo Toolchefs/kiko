@@ -108,8 +108,8 @@ class OperatorsFactory(object):
         self._entries.clear()
 
     def reload_operators(self):
-        for name, versions in self._entries.iteritems():
-            for ver, constructor in versions.iteritems():
+        for name, versions in self._entries.items():
+            for ver, constructor in versions.items():
                 module_name = constructor.__module__
                 class_name = constructor.__name__
 
