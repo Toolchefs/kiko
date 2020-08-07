@@ -118,7 +118,7 @@ class KikoFile(object):
 
     def _save_data_only(self):
         with open(self._file_path, 'w') as f:
-            json.dump(self._data, f)
+            json.dump(self._data, f, indent=2, sort_keys=True)
 
     @property
     def version(self):
