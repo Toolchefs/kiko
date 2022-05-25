@@ -81,7 +81,7 @@ class MayaFacadeHelper(object):
                 c_plug = plug.elementByLogicalIndex(index)
                 cls.get_channels(c_plug, attrs_objs)
         elif plug.isCompound():
-            for index in xrange(plug.numChildren()):
+            for index in range(plug.numChildren()):
                 c_plug = plug.child(index)
                 cls.get_channels(c_plug, attrs_objs)
         elif plug.isKeyable() and t not in cls.INVALID_ATTR_TYPES:
@@ -837,7 +837,7 @@ class MayaFacade(BaseFacade):
              'rx': math.degrees(r.x), 'ry': math.degrees(r.y),
              'rz':math.degrees(r.z)}
 
-        for name, value in d.iteritems():
+        for name, value in d.items():
             plug = mfn.findPlug(name)
             kco = MayaFacade.get_keyframable_channel_object(node_obj, plug)
             # this might happen when having incoming connectiosn to this plug
@@ -851,7 +851,7 @@ class MayaFacade(BaseFacade):
             plugs = OpenMaya.MPlugArray()
             channel_obj.connectedTo(plugs, True, False)
             if channel_obj.connectedTo(plugs, True, False):
-                for index in xrange(plugs.length()):
+                for index in range(plugs.length()):
                     MayaUndoHelper.dg_modifier.disconnect(plugs[index],
                                                           channel_obj)
 

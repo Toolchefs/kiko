@@ -32,7 +32,7 @@ KIKO_TO_NUKE_CHANNELS = {KIKO_STD_CHANNEL_NAMES.TX: 'translate[0]',
                          KIKO_STD_CHANNEL_NAMES.RO: 'rot_order'}
 
 NUKE_TO_KIKO_CHANNELS = {}
-for k, v in KIKO_TO_NUKE_CHANNELS.iteritems():
+for k, v in KIKO_TO_NUKE_CHANNELS.items():
     NUKE_TO_KIKO_CHANNELS[v] = k
 
 
@@ -47,9 +47,9 @@ NUKE_NODE_TO_KIKO_CHANNELS = {'Camera': {"uniform_scale": "cameraScale",
 NUKE_NODE_TO_KIKO_CHANNELS['Camera2'] = NUKE_NODE_TO_KIKO_CHANNELS['Camera']
 
 KIKO_TO_NUKE_NODE_CHANNELS = {}
-for k, v in NUKE_NODE_TO_KIKO_CHANNELS.iteritems():
+for k, v in NUKE_NODE_TO_KIKO_CHANNELS.items():
     KIKO_TO_NUKE_NODE_CHANNELS[k] = {}
-    for ck, cv in v.iteritems():
+    for ck, cv in v.items():
         KIKO_TO_NUKE_NODE_CHANNELS[k][cv] = ck
 
 
@@ -70,7 +70,7 @@ KIKO_TO_NUKE_TANGENT_TYPES = {
             KIKO_TANGENT_TYPES.USER_DEFINED : nuke.USER_SET_SLOPE}
 
 NUKE_TO_KIKO_TANGENT_TYPES = {}
-for k, v in KIKO_TO_NUKE_TANGENT_TYPES.iteritems():
+for k, v in KIKO_TO_NUKE_TANGENT_TYPES.items():
    NUKE_TO_KIKO_TANGENT_TYPES[v] = k
 
 NUKE_TO_KIKO_TANGENT_TYPES[nuke.SMOOTH] = KIKO_TANGENT_TYPES.SPLINE

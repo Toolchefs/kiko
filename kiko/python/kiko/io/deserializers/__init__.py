@@ -1,6 +1,4 @@
 
-import cPickle
-
 from kiko.constants import SERIALIZATION
 
 from kiko.exceptions import (KikoDeserializeException,

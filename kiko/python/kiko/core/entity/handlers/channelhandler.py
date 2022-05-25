@@ -12,10 +12,11 @@
 #
 # ==============================================================================
 
-from types import NoneType
 from collections import OrderedDict
 
 from kiko.exceptions import InvalidChannelException
+
+NoneType = type(None)
 
 class ChannelHandler(object):
     _channel_type = NoneType
@@ -34,7 +35,7 @@ class ChannelHandler(object):
         return self._channels.keys()
 
     def iter_channels(self):
-        for c in self._channels.itervalues():
+        for c in self._channels.values():
             yield c
 
     def remove_channel(self, channel):
@@ -64,7 +65,7 @@ class ChannelHandler(object):
         self._channels.clear()
 
     def channel_by_index(self, index):
-        return self._channels.values()[index]
+        return list(self._channels.values())[index]
 
     def channel_index(self, channel):
         return self._channels.keys().index(channel.name)

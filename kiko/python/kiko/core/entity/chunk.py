@@ -12,12 +12,13 @@
 #
 # ==============================================================================
 
-from types import NoneType
-
 from abc import ABCMeta, abstractmethod
 
 from kiko.exceptions import (InvalidParentChunkExpception, InvalidOperation,
                              InvalidOperatorName)
+
+NoneType = type(None)
+
 
 class Chunk(object):
     __metaclass__ = ABCMeta

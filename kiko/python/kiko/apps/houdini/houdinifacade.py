@@ -29,7 +29,7 @@ from .constants import (HOU_TO_KIKO_CHANNELS, KIKO_TO_HOU_CHANNELS,
                         HOU_TO_KIKO_INFINITY_BEHAVIOR,
                         KIKO_TO_HOU_TANGENT_TYPES, HOU_TO_KIKO_TANGENT_TYPES)
 
-from houdinipreferences import HoudiniPreferences
+from .houdinipreferences import HoudiniPreferences
 
 
 class HoudiniFacade(BaseFacade):

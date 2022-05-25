@@ -12,7 +12,6 @@
 #
 # ==============================================================================
 
-from types import NoneType
 from collections import OrderedDict
 
 from kiko.exceptions import InvalidChannelException

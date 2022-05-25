@@ -12,13 +12,14 @@
 #
 # ==============================================================================
 
-from types import NoneType
 from collections import OrderedDict
 
 from abc import ABCMeta, abstractmethod
 
 from kiko.exceptions import InvalidItemException
 from kiko.core.entity.handlers import channelhandler, chunkhandler, maptohandler
+
+NoneType = type(None)
 
 class BaseItem(channelhandler.ChannelHandler, chunkhandler.ChunkHandler,
                maptohandler.MapToHandler):
@@ -93,7 +94,7 @@ class BaseItem(channelhandler.ChannelHandler, chunkhandler.ChunkHandler,
         return self._children.keys()
 
     def iter_children(self):
-        for c in self._children.itervalues():
+        for c in self._children.values():
             yield c
 
     def remove_child(self, child):
@@ -120,7 +121,7 @@ class BaseItem(channelhandler.ChannelHandler, chunkhandler.ChunkHandler,
         return self._children.get(name)
 
     def child_by_index(self, index):
-        return self._children.values()[index]
+        return list(self._children.values())[index]
 
     def clear_children(self):
         self._children.clear()

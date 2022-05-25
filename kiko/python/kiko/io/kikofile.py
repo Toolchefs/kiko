@@ -16,7 +16,12 @@ import os
 import time
 import tarfile
 import json
-import StringIO
+
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 import pprint
 
 from kiko.exceptions import FileManagerError, KikoWarning
@@ -52,13 +57,13 @@ class KikoFile(object):
     @staticmethod
     def _add_to_tar(tar_file, name, f_obj):
         info = tarfile.TarInfo(name=name)
-        info.size = len(f_obj.buf)
-        info.time = time.time()
+        info.size = f_obj.tell()
+        info.mtime = time.time()
         tar_file.addfile(tarinfo=info, fileobj=f_obj)
 
     @classmethod
     def _add_to_tar_from_dict(cls, tar_file, name, data):
-        io = StringIO.StringIO()
+        io = StringIO()
         json.dump(data, io)
         io.seek(0)
         cls._add_to_tar(tar_file, name, io)
@@ -71,7 +76,7 @@ class KikoFile(object):
 
             file_name = os.path.join(KIKO_FILE.SEQUENCE_FOLDER, file_name)
 
-            io = StringIO.StringIO()
+            io = StringIO()
             io.write(self._image_sequence[i])
             io.seek(0)
             self._add_to_tar(tar_file, file_name, io)
@@ -95,9 +100,8 @@ class KikoFile(object):
         tar_file.close()
 
     def _save_data_only(self):
-        f = open(self._file_path, 'wb')
-        json.dump(self._data, f)
-        f.close()
+        with open(self._file_path, 'w') as f:
+            json.dump(self._data, f)
 
     @property
     def version(self):
@@ -116,9 +120,8 @@ class KikoFile(object):
     data = property(get_data, set_data)
 
     def _parse_data_only(self):
-        f = open(self._file_path, 'rb')
-        self._data = json.load(f)
-        f.close()
+        with open(self._file_path, 'r') as f:
+            self._data = json.load(f)
 
     def parse(self):
         if not os.path.exists(self._file_path):

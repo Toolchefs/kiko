@@ -168,7 +168,7 @@ class KikoManager(object):
         if obj_mapping:
             #building a new map in case there is some channel remapping
             temp_mapping = {}
-            for key, value in obj_mapping.iteritems():
+            for key, value in obj_mapping.items():
                 tokens = key.split('.')
                 if (len(tokens) == 2) != ('.' in value):
                     raise KikoManagerException("Cannot map channel to object "
