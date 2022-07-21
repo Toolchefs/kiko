@@ -13,6 +13,7 @@
 # ==============================================================================
 
 import os
+import sys
 import time
 import tarfile
 import json
@@ -57,8 +58,12 @@ class KikoFile(object):
     @staticmethod
     def _add_to_tar(tar_file, name, f_obj):
         info = tarfile.TarInfo(name=name)
-        info.size = f_obj.tell()
-        info.mtime = time.time()
+        if sys.version_info.major == 2:
+            info.size = len(f_obj.buf)
+            info.time = time.time()
+        else:
+            info.size = f_obj.tell()
+            info.mtime = time.time()
         tar_file.addfile(tarinfo=info, fileobj=f_obj)
 
     @classmethod
@@ -93,7 +98,8 @@ class KikoFile(object):
 
         self._metadata[SERIALIZATION.KIKO_VERSION] = KIKO_FILE_VERSION
 
-        self._add_to_tar_from_dict(tar_file, KIKO_FILE.METADATA, self._metadata)
+        self._add_to_tar_from_dict(tar_file, KIKO_FILE.METADATA,
+                                   self._metadata)
         self._add_to_tar_from_dict(tar_file, KIKO_FILE.DATA, self._data)
         self._add_images(tar_file)
 
@@ -135,11 +141,13 @@ class KikoFile(object):
 
         metadata_member = tar_file.getmember(KIKO_FILE.METADATA)
         if metadata_member:
-            self._metadata = json.load(tar_file.extractfile(metadata_member))
+            v = tar_file.extractfile(metadata_member)
+            self._metadata = json.load(v)
 
         data_member = tar_file.getmember(KIKO_FILE.DATA)
         if data_member:
-            self._data = json.load(tar_file.extractfile(data_member))
+            v = tar_file.extractfile(data_member)
+            self._data = json.load(v)
 
         #extracting images
         self._image_sequence = []
