@@ -16,7 +16,7 @@ import os
 import sys
 import traceback
 
-from qthandler import QtGui, QtCore, QtWidgets
+from .qthandler import QtCore, QtWidgets
 
 from kiko.constants import (KIKO_FILE_EXTENSION, KB_FILE_EXTENSION,
                             IMPORT_METHODS)
@@ -26,9 +26,9 @@ from kiko.io import deserializers
 
 from .mixed import (create_box_layout, create_label, ORIENTATION, FrameRange,
                     create_separator, create_radio_buttons)
-from datatree import DataTreeAndSearchWidget
+from .datatree import DataTreeAndSearchWidget
 
-from preview import PreviewWidget
+from .preview import PreviewWidget
 
 
 class KikoImporterDialog(QtWidgets.QDialog):

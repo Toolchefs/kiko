@@ -14,6 +14,7 @@
 
 
 import re
+import sys
 import math
 import warnings
 import tempfile
@@ -288,7 +289,15 @@ class MayaFacadeHelper(object):
     @staticmethod
     def get_main_window():
         main_window_ptr = omui.MQtUtil.mainWindow()
-        main_window = shiboken.wrapInstance(long(main_window_ptr), QtWidgets.QMainWindow)
+
+        # Support for Python 2
+        if sys.version_info.major < 3:
+            main_window_ptr = long(main_window_ptr)
+        else:
+            main_window_ptr = int(main_window_ptr)
+
+        main_window = shiboken.wrapInstance(main_window_ptr,
+                                            QtWidgets.QMainWindow)
 
         return main_window
 

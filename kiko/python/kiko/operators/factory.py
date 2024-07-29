@@ -20,8 +20,10 @@ from kiko.exceptions import InvalidClassException, InvalidFacadeException
 from kiko.operators.baseoperator import BaseOperator
 from kiko.apps.basefacade import BaseFacade
 from kiko.utils.patterns import Singleton
+from kiko.vendor import six
 
-class OperatorsFactory(Singleton):
+@six.add_metaclass(Singleton)
+class OperatorsFactory(object):
 
     def __init__(self):
         self._entries = OrderedDict()
@@ -74,7 +76,6 @@ class OperatorsFactory(Singleton):
         res = set()
         for versions in self._entries.values():
             for c in versions.values():
-                import os
                 if not c.is_channel_operator() and (app is None or
                                                     c.is_app_supported(app)):
                     res.add(c.name())

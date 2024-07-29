@@ -19,7 +19,7 @@ from kiko.exceptions import InvalidChunkException
 NoneType = type(None)
 
 class ChunkHandler(object):
-    _chunk_type = NoneType
+    _chunk_type = type(None)
 
     def __init__(self):
         self._chunks = OrderedDict()

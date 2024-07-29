@@ -12,7 +12,7 @@
 #
 # ==============================================================================
 
-from qthandler import QtGui, QtWidgets, QtCore
+from .qthandler import QtGui, QtWidgets, QtCore
 
 from kiko.constants import (KIKO_FILE_EXTENSION, KIKO_PREVIEW_PLAY,
                             KIKO_PREVIEW_FPS)

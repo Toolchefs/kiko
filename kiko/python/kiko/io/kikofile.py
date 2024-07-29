@@ -18,12 +18,16 @@ import time
 import tarfile
 import json
 
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
-
 import pprint
+
+try:
+    # Python 2
+    from StringIO import StringIO
+    BytesIO = StringIO
+
+except ImportError:
+    # Python 3
+    from io import StringIO, BytesIO
 
 from kiko.exceptions import FileManagerError, KikoWarning
 from kiko.constants import (KIKO_FILE_VERSION, KIKO_FILE_EXTENSION, KIKO_FILE,
@@ -57,13 +61,22 @@ class KikoFile(object):
 
     @staticmethod
     def _add_to_tar(tar_file, name, f_obj):
+
+        # Figure out how large the file is
+        pos = f_obj.tell()
+        f_obj.seek(0, os.SEEK_END)
+        size = f_obj.tell()
+        f_obj.seek(pos)  # Restore seek position
+
         info = tarfile.TarInfo(name=name)
-        if sys.version_info.major == 2:
-            info.size = len(f_obj.buf)
-            info.time = time.time()
-        else:
-            info.size = f_obj.tell()
-            info.mtime = time.time()
+        info.size = size
+        info.mtime = time.time()  # Update modified time
+
+        # Translate Unicode to bytes, it's what tar would want
+        if sys.version_info >= (3, 0):
+            f_obj = BytesIO(f_obj.read().encode("utf-8"))
+
+
         tar_file.addfile(tarinfo=info, fileobj=f_obj)
 
     @classmethod
@@ -81,9 +94,11 @@ class KikoFile(object):
 
             file_name = os.path.join(KIKO_FILE.SEQUENCE_FOLDER, file_name)
 
-            io = StringIO()
+            io = BytesIO()
+
             io.write(self._image_sequence[i])
             io.seek(0)
+
             self._add_to_tar(tar_file, file_name, io)
 
     def save(self):
@@ -107,7 +122,7 @@ class KikoFile(object):
 
     def _save_data_only(self):
         with open(self._file_path, 'w') as f:
-            json.dump(self._data, f)
+            json.dump(self._data, f, indent=2, sort_keys=True)
 
     @property
     def version(self):
@@ -149,7 +164,7 @@ class KikoFile(object):
             v = tar_file.extractfile(data_member)
             self._data = json.load(v)
 
-        #extracting images
+        # Extracting images
         self._image_sequence = []
         for i in range(self._metadata[KIKO_FILE.NUM_IMAGES]):
             file_name = os.path.join(KIKO_FILE.SEQUENCE_FOLDER,
@@ -187,4 +202,3 @@ class KikoFile(object):
     # TODO: make this so that dict and lists are printed on the same line
     def print_data(self):
         pprint.PrettyPrinter(indent=4).pprint(self._data)
-

@@ -14,7 +14,7 @@
 
 import os
 
-from qthandler import QtGui, QtWidgets
+from .qthandler import QtWidgets
 
 
 class ORIENTATION:
