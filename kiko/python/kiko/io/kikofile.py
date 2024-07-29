@@ -17,6 +17,7 @@ import sys
 import time
 import tarfile
 import json
+
 import pprint
 
 try:
@@ -75,6 +76,7 @@ class KikoFile(object):
         if sys.version_info >= (3, 0):
             f_obj = BytesIO(f_obj.read().encode("utf-8"))
 
+
         tar_file.addfile(tarinfo=info, fileobj=f_obj)
 
     @classmethod
@@ -93,6 +95,7 @@ class KikoFile(object):
             file_name = os.path.join(KIKO_FILE.SEQUENCE_FOLDER, file_name)
 
             io = BytesIO()
+
             io.write(self._image_sequence[i])
             io.seek(0)
 
@@ -110,7 +113,8 @@ class KikoFile(object):
 
         self._metadata[SERIALIZATION.KIKO_VERSION] = KIKO_FILE_VERSION
 
-        self._add_to_tar_from_dict(tar_file, KIKO_FILE.METADATA, self._metadata)
+        self._add_to_tar_from_dict(tar_file, KIKO_FILE.METADATA,
+                                   self._metadata)
         self._add_to_tar_from_dict(tar_file, KIKO_FILE.DATA, self._data)
         self._add_images(tar_file)
 
@@ -137,9 +141,8 @@ class KikoFile(object):
     data = property(get_data, set_data)
 
     def _parse_data_only(self):
-        f = open(self._file_path, 'rb')
-        self._data = json.load(f)
-        f.close()
+        with open(self._file_path, 'r') as f:
+            self._data = json.load(f)
 
     def parse(self):
         if not os.path.exists(self._file_path):
@@ -153,11 +156,13 @@ class KikoFile(object):
 
         metadata_member = tar_file.getmember(KIKO_FILE.METADATA)
         if metadata_member:
-            self._metadata = json.load(tar_file.extractfile(metadata_member))
+            v = tar_file.extractfile(metadata_member)
+            self._metadata = json.load(v)
 
         data_member = tar_file.getmember(KIKO_FILE.DATA)
         if data_member:
-            self._data = json.load(tar_file.extractfile(data_member))
+            v = tar_file.extractfile(data_member)
+            self._data = json.load(v)
 
         # Extracting images
         self._image_sequence = []

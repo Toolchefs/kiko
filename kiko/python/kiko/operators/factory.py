@@ -13,6 +13,7 @@
 # ==============================================================================
 
 import sys
+
 from collections import OrderedDict
 
 from kiko.exceptions import InvalidClassException, InvalidFacadeException
@@ -95,7 +96,7 @@ class OperatorsFactory(object):
                                                      channel=channel)
 
     def get_latest_version(self, name):
-        if not name in self._entries:
+        if name not in self._entries:
             return None
 
         versions = list(self._entries[name].keys())

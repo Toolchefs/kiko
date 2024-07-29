@@ -7,7 +7,9 @@ from kiko.operators.factory import OperatorsFactory
 
 _initialized = False
 
+
 def initialize():
+    import os
     global _initialized
 
     if not _initialized:

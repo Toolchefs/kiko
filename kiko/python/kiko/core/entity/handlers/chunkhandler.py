@@ -16,6 +16,8 @@ from collections import OrderedDict
 
 from kiko.exceptions import InvalidChunkException
 
+NoneType = type(None)
+
 class ChunkHandler(object):
     _chunk_type = type(None)
 
@@ -63,7 +65,7 @@ class ChunkHandler(object):
         self._chunks.clear()
 
     def chunk_by_index(self, index):
-        return self._chunks.values()[index]
+        return list(self._chunks.values())[index]
 
     def chunk_index(self, chunk):
         return self._chunks.keys().index(chunk.name)

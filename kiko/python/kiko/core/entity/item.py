@@ -120,7 +120,7 @@ class BaseItem(channelhandler.ChannelHandler, chunkhandler.ChunkHandler,
         return self._children.get(name)
 
     def child_by_index(self, index):
-        return self._children.values()[index]
+        return list(self._children.values())[index]
 
     def clear_children(self):
         self._children.clear()

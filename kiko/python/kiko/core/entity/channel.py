@@ -17,6 +17,8 @@ from collections import OrderedDict
 from kiko.exceptions import InvalidItemException, InvalidChunkException
 from kiko.core.entity.handlers import chunkhandler, maptohandler
 
+NoneType = type(None)
+
 class Channel(chunkhandler.ChunkHandler, maptohandler.MapToHandler):
     _parent_type = type(None)
     _chunk_type = type(None)
